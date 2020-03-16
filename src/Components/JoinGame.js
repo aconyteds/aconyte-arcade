@@ -1,23 +1,22 @@
 import React from 'react';
-import { w3cwebsocket as W3CWebSocket } from "websocket";
-
-const client = new W3CWebSocket("ws://localhost:8000");
+import ReactDOM from 'react-dom';
+import $ from "jquery";
+import Lobby from './Lobby';
 
 class JoinGame extends React.Component{
   componentDidMount(){
-    client.onopen = () => {
-      console.log('WebSocket Client Connected');
-    };
-    client.onmessage = (message) => {
-      console.log(message);
-    };
   }
-  
+
 	constructor(props){
   	super(props)
+    var lobbyData = props;
+    if(!!props.match){
+      lobbyData = props.match.params;
+    }
+
     this.state = {
     	screenName:window.localStorage.avatar,
-      roomCode:""
+      roomCode:lobbyData.roomCode
     }
     this.screenNameChange = this.screenNameChange.bind(this);
     this.roomCodeChange = this.roomCodeChange.bind(this);
@@ -33,22 +32,49 @@ class JoinGame extends React.Component{
   }
 
   joinGame(){
-  	console.log(this.state)
+    $.get({
+			url:"//localhost:8000/join/"+this.state.roomCode,
+			crossDomain:true,
+			success:(response)=>{
+        console.log(response);
+				//Check the response for information
+				if(response && (!!response.port && !! response.roomCode)){
+					//setup the WS connection
+          window.location.replace(window.location.origin+"/"+response.roomCode);
+				}
+				else{
+					//TODO:: Come up with something better than this
+					alert(response);
+				}
+			}
+    });
   }
 
 	render() {
   	return (
     	<div>
     	  <form>
-          <div>
-            <label htmlFor="screenName">Screen Name:</label>
-            <input type="text" id="screenName" defaultValue={this.state.screenName} onChange={this.screenNameChange}/>
+          <div className="row">
+            <div className="col">
+              <div className="input-group">
+                <label htmlFor="screenName">Screen Name:</label>
+                <input type="text" id="screenName" defaultValue={this.state.screenName} onChange={this.screenNameChange}/>
+              </div>
+            </div>
           </div>
-    	    <div>
-    	      <label htmlFor="roomCode">Room Code:</label>
-            <input type="text" id="roomCode" onChange={this.roomCodeChange}/>
-    	    </div>
-          <button type="button" onClick={this.joinGame}>Join Game</button>
+          <div className="row">
+            <div className="col">
+              <div className="input-group">
+        	      <label htmlFor="roomCode">Room Code:</label>
+                <input type="text" id="roomCode" onChange={this.roomCodeChange} defaultValue={this.state.roomCode}/>
+        	    </div>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col center">
+              <button type="button" className="btn btn-primary" onClick={this.joinGame}>Join Game</button>
+            </div>
+          </div>
     	  </form>
     	</div>
     )

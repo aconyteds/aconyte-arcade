@@ -5,16 +5,25 @@ import 'font-awesome/scss/font-awesome.scss';
 import './index.scss';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 import AconyteArcade from './Components/AconyteArcade';
-import Lobby from './Components/Lobby';
+import JoinGame from './Components/JoinGame';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <Router>
-    <div>
-      <Route exact path="/">
-        <AconyteArcade />
-      </Route>
-      <Route path="/join/:roomCode" component={Lobby} />
+    <div className="container">
+      <div className="jumbotron">
+        <h2><a href="/">Aconyte DS Arcade</a></h2>
+      </div>
+      <div className="row">
+        <div className="col" id="mainContainer">
+          <Route exact path="/">
+              <AconyteArcade />
+          </Route>
+          <Route exact path="/:roomCode" render={(props) =>(
+            <AconyteArcade {...props} displayMode="hostGame" /> )} />
+          <Route path="/join/:roomCode" component={JoinGame} />
+        </div>
+      </div>
     </div>
   </Router>
   , document.getElementById('root'));
