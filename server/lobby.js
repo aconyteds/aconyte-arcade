@@ -24,6 +24,7 @@ module.exports = {
     return this.currentPort;
   },
   createLobby: function(roomCode, openRooms) {
+    //Creates a new lobby at the current port: ws://<localhost>:8100/lobby/roomCode
     var lobbyApp = express();
     var expressWs = require('express-ws')(lobbyApp);
     var timeout = new Date().getTime(),
@@ -61,15 +62,57 @@ module.exports = {
       timeout = new Date().getTime();
     }
 
+    //Setup the lobby Handlers
     lobbyApp.ws('/lobby/' + roomCode, function(ws, req) {
       resetTimeout();
 
-      ws.on('message', function(msg) {
-        //console.log(msg);
-        resetTimeout();
-        expressWs.getWss().clients.forEach(client => (client.send("User Submitted: '" + msg + "' to " + countUsers() + " users in room " + roomCode)));
+      //Setup a handler for when a user Connects to the lobby to update the players list
+      ws.on("open", function(){
+        console.log("New Connection Opened");
       });
 
+
+      ws.on('message', function(msg) {
+        console.log(msg);
+        resetTimeout();
+        var connections = expressWs.getWss().clients;
+        if(msg.type){
+          switch(msg.type){
+            case "chat":
+              connections.forEach(client => (client.send({
+                type:"chat",
+                user:msg.avatar,
+                message:msg.message
+              })));
+              break;
+            case "connect":
+              connections.forEach(client => (client.send({
+                type:"connect",
+                user:msg.avatar
+              })));
+              break;
+            case "gameChoice":
+              connections.forEach(client => (client.send({
+                  type:"gameChange",
+                  value:msg.value
+              })));
+              break;
+            case "launchGame":
+              connections.forEach(client => (client.send({
+                type:"launchGame"
+              })));
+              break;
+          }
+        }
+        else{
+          //Setup a handler for when users message each other to broadcast that message to each other
+          connections.forEach(client => (client.send("User Submitted: '" + msg + "' to " + countUsers() + " users in room " + roomCode)));
+        }
+      });
+
+      //Setup a handler for when the Host Changes the Game
+
+      //Setup a handler for when the host launches the game
 
     });
 
