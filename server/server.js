@@ -2,8 +2,20 @@ const express = require('express')
 const app = express();
 const lobby = require('./lobby');
 
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  },(err, request, response, next) => {
+    // log the error, for now just console.log
+    console.log(err)
+    response.status(500).send('Something broke!');
+});
+
 app.get('/', (request, response) => {
-  throw new Error('oops')
+  console.log("New Client connected: ",request.headers);
+
+  response.send("Connected to Server.");
 });
 
 const openRooms = [];
@@ -36,14 +48,10 @@ app.get("/join/:roomCode", (request, response) => {
         return true;
       }
     })) {
-    response.status(204).send("Room no longer exists");
+    response.status(200).send("Room no longer exists");
   }
 });
 
-app.use((err, request, response, next) => {
-  // log the error, for now just console.log
-  console.log(err)
-  response.status(500).send('Something broke!');
-});
+
 
 app.listen(8000);
