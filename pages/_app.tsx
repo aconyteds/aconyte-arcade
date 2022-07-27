@@ -16,6 +16,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Navbar.Brand href="/">Arcade</Navbar.Brand>
         <Nav className="me-auto">
           <Nav.Link href="/games/sudoku">Sudoku</Nav.Link>
+          <Nav.Link href="/games/wordGame">Word Game</Nav.Link>
         </Nav>
       </Container>
     </Navbar>
