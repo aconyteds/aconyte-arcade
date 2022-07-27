@@ -1,4 +1,0 @@
-$ cat .foreverignore
-
-**/node_modules
-**/src
