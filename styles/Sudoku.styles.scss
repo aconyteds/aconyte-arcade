@@ -1,0 +1,38 @@
+.sudoku-puzzle {
+    .sudoku-row {
+        &:nth-child(3n):not(:last-child) {
+            border-bottom: #000 solid 2px;
+        }
+
+        .cell {
+            display: inline-block;
+            padding: .5rem;
+            width: 3rem;
+            height: 3rem;
+            border: 1px solid #000;
+            text-align: center;
+            position: relative;
+
+            &:nth-child(3n):not(:last-child) {
+                border-right: #000 solid 2px;
+            }
+
+            &:not(.locked) {
+                cursor: pointer;
+            }
+
+            .cell-value {
+                &.no-value {
+                    visibility: hidden;
+                }
+            }
+
+            .candidates {
+                position: absolute;
+                right: 0;
+                top: 0;
+                font-size: xx-small;
+            }
+        }
+    }
+}

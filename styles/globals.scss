@@ -1,0 +1,60 @@
+@import "./Theme/_vapor_variables.scss";
+@import '~bootstrap/scss/bootstrap.scss';
+@import "./Theme/_vapor.scss";
+// @import "./Layout.scss";
+@import "./toaster.scss";
+@import "./Sudoku.styles.scss";
+@import "./WordGame.styles.scss";
+
+@font-face {
+  font-family: Source Code Pro;
+  src: url('./Fonts/SourceCodePro/SourceCodePro-VariableFont_wght.ttf');
+}
+
+@font-face {
+  font-family: MuseoModerno;
+  src: url('./Fonts/MuseoModerno/MuseoModerno-VariableFont_wght.ttf');
+}
+
+@font-face {
+  font-family: Warnes;
+  src: url("./Fonts/Warnes/Warnes-Regular.ttf");
+}
+
+
+html,
+body {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+#__next {
+  height: 100%;
+  width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: Warnes;
+}
+
+.cursor-pointer {
+  cursor: pointer !important;
+}
