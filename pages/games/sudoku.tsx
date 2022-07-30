@@ -1,10 +1,8 @@
-import type { NextPage } from 'next';
-import Sudoku from '../../common/components/Sudoku';
+import type { NextPage } from "next";
+import Sudoku from "../../common/components/Sudoku";
 
 const Home: NextPage = () => {
-    return (
-        <Sudoku />
-    )
-}
+  return <Sudoku />;
+};
 
-export default Home
+export default Home;

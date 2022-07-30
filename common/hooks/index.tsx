@@ -6,4 +6,13 @@ import useToggle from "./useToggle";
 import useUpdateEffect from "./useUpdateEffect";
 import { useLocalStorage, useSessionStorage } from "./useStorage";
 
-export { useArray, useTimeout, useDebounce, useInterval, useToggle, useUpdateEffect, useLocalStorage, useSessionStorage };
+export {
+  useArray,
+  useTimeout,
+  useDebounce,
+  useInterval,
+  useToggle,
+  useUpdateEffect,
+  useLocalStorage,
+  useSessionStorage,
+};
