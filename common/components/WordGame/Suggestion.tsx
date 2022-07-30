@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
+import { useToggle } from '../../hooks';
+import { WordGameContext } from './context';
 
-interface SuggestionProps {
-    suggestion: string;
-}
 
-export default function Suggestion({ suggestion }: SuggestionProps) {
-    const [show, setShow] = React.useState(false);
+export default function Suggestion() {
+    const { suggestion } = useContext(WordGameContext);
+    const [show, setShow] = useToggle(false);
 
     useEffect(() => {
         setShow(false);
@@ -17,9 +17,12 @@ export default function Suggestion({ suggestion }: SuggestionProps) {
     }
 
     return (
-        <Row className="justify-content-center cursor-pointer" onClick={handleClick}>
+        <Row className="justify-content-center cursor-pointer m-3" onClick={handleClick}>
             <Col xs="auto">
-                <h3 className={show ? "revealo" : "obscurio"}><span >{suggestion?.toUpperCase()}</span></h3>
+                <h3 className={show ? "revealo" : "obscurio"}>
+                    <span>{suggestion.suggestion.toUpperCase()}</span>
+                    <small className="text-muted ps-3">{suggestion.probability.toFixed(2)}%</small>
+                </h3>
             </Col>
         </Row>
     )

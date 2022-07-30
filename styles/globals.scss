@@ -1,7 +1,7 @@
 @import "./Theme/_vapor_variables.scss";
 @import '~bootstrap/scss/bootstrap.scss';
 @import "./Theme/_vapor.scss";
-// @import "./Layout.scss";
+@import "./Layout.scss";
 @import "./toaster.scss";
 @import "./Sudoku.styles.scss";
 @import "./WordGame.styles.scss";
@@ -52,7 +52,7 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: Warnes;
+  font-family: MuseoModerno;
 }
 
 .cursor-pointer {

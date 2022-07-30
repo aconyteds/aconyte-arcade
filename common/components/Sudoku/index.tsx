@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { useArray, useToggle } from '../../hooks';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col, Button, Container } from 'react-bootstrap';
 import { generateSudoku, validatePuzzle, solveSudoku } from "./utility";
 import Puzzle from "./Puzzle";
 
@@ -53,14 +53,14 @@ export default function Sudoku() {
     };
 
     return (
-        <>
+        <Container className="h-100 overflow-auto">
             <Row className="justify-content-center">
                 <Col xs="auto">
                     <h1>Sudoku</h1>
                 </Col>
             </Row>
             <Row className="justify-content-center">
-                <Col xs="auto">
+                <Col lg={6}>
                     <div className={`sudoku-puzzle${victory ? " border-success" : ''}`}>
                         <Puzzle puzzle={puzzle} updateProgress={updateProgress} />
                     </div>
@@ -71,21 +71,21 @@ export default function Sudoku() {
                     <h1 className={victory ? "text-success" : "text-danger"}>{victory ? "You Win!" : "Incorrect Solution"}</h1>
                 </Col>
             </Row> : null}
-            <Row className="justify-content-center mt-2">
+            <Row className="justify-content-center mt-2 gy-3">
                 {playing ? <>
-                    <Col xs="auto">
-                        <Button onClick={resetPuzzle}>Reset Puzzle</Button>
+                    <Col xs={12} lg="auto">
+                        <Button size="lg" className="w-100" onClick={resetPuzzle}>Reset Puzzle</Button>
                     </Col>
-                    <Col xs="auto">
-                        <Button disabled={!readyToSubmit} onClick={submitPuzzle}>Submit Puzzle</Button>
+                    <Col xs={12} lg="auto">
+                        <Button size="lg" className="w-100" disabled={!readyToSubmit} onClick={submitPuzzle}>Submit Puzzle</Button>
                     </Col>
-                    <Col xs="auto">
-                        <Button variant="success" onClick={solvePuzzle}>Solve Puzzle</Button>
+                    <Col xs={12} lg="auto">
+                        <Button size="lg" className="w-100" variant="success" onClick={solvePuzzle}>Solve Puzzle</Button>
                     </Col>
-                </> : <Col xs="auto">
-                    <Button variant="success" onClick={newPuzzle}>New Puzzle</Button>
+                </> : <Col lg="auto">
+                    <Button size="lg" className="w-100" variant="success" onClick={newPuzzle}>New Puzzle</Button>
                 </Col>}
             </Row>
-        </>
+        </Container>
     )
 }

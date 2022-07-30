@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
-import { Difficulty } from '.';
+import { WordGameContext, Difficulty } from './context';
 
-interface MenuProps {
-    handleDifficulty: (difficulty: Difficulty) => void;
-}
 
-export default function Menu({
-    handleDifficulty
-}: MenuProps) {
+export default function Menu() {
+    const { setDifficulty, newGame } = useContext(WordGameContext);
+
+    const handleDifficulty = (difficulty: Difficulty) => {
+        setDifficulty(difficulty);
+        newGame();
+    };
+
     return (
-        <Row className="justify-content-center text-center">
+        <Row className="justify-content-center text-center align-items-center h-100">
             <Col xs="auto">
                 <Row>
                     <Col>
@@ -22,18 +24,18 @@ export default function Menu({
                         <p>Select a difficulty!</p>
                     </Col>
                 </Row>
-                <Row className="justify-content-center mt-1">
-                    <Col xs={6}>
+                <Row className="justify-content-center mt-2">
+                    <Col lg={6}>
                         <Button className="w-100" variant="success" size='lg' onClick={() => handleDifficulty("easy")}>Easy</Button>
                     </Col>
                 </Row>
-                <Row className="justify-content-center mt-1">
-                    <Col xs={6}>
+                <Row className="justify-content-center mt-2">
+                    <Col lg={6}>
                         <Button className="w-100" variant="warning" size='lg' onClick={() => handleDifficulty('medium')}>Medium</Button>
                     </Col>
                 </Row>
-                <Row className="justify-content-center mt-1">
-                    <Col xs={6}>
+                <Row className="justify-content-center mt-2">
+                    <Col lg={6}>
                         <Button className="w-100" variant="danger" size='lg' onClick={() => handleDifficulty('hard')}>Hard</Button>
                     </Col>
                 </Row>

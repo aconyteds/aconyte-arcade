@@ -34,9 +34,7 @@ export default function Cell({
 
     const className = useMemo(() => {
         let name = "cell";
-        if (locked) {
-            name += " locked bg-dark text-white";
-        }
+        name += locked ? " locked bg-dark text-success" : " text-white";
         if (!locked && suggestions.length === 0) {
             name += " border-danger";
         }
@@ -68,10 +66,10 @@ export default function Cell({
 
     return (
         <div className={className} onClick={onClick}>
-            <span className={`cell-value${value === 0 ? ' no-value' : ''}`}>
+            <span className={`fs-1 cell-value${value === 0 ? ' no-value' : ''}`}>
                 {value}
             </span>
-            {locked ? null : <small className="candidates">{suggestions.join(" ")}</small>}
+            {locked ? null : <small className="candidates text-info">{suggestions.join(" ")}</small>}
         </div>
     )
 }

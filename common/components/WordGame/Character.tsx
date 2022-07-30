@@ -1,15 +1,15 @@
 import React from 'react';
 import { Col } from 'react-bootstrap';
-import { Feedback } from './Game';
+import { Feedback } from './context';
 
 export default function Character({
-    character,
-    inWord,
-    correct,
-    isPossibleDouble
+    letter,
+    in_word,
+    in_correct_location,
+    possible_double
 }: Feedback) {
 
-    const className = correct ? "bg-success text-white" : inWord ? "bg-warning text-white" : "bg-danger";
+    const className = in_correct_location ? "bg-success text-white" : in_word ? "bg-warning text-white" : "bg-danger";
 
     return (
         <Col xs="auto" className={`border border-1 ${className}`}><span style={{
@@ -19,7 +19,7 @@ export default function Character({
             display: "inline-block",
             textAlign: "center",
             verticalAlign: "middle",
-            textDecoration: isPossibleDouble ? "underline" : "none"
-        }}>{character.toUpperCase()}</span></Col>
+            textDecoration: possible_double ? "underline" : "none"
+        }}>{letter.toUpperCase()}</span></Col>
     )
 }

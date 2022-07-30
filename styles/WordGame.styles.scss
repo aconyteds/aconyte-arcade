@@ -1,13 +1,13 @@
 .obscurio {
     position: relative;
 
-    &>span {
+    &>* {
         filter: blur(5px);
         -webkit-filter: blur(5px);
     }
 
     &::before {
-        content: "Click to Reveal";
+        content: "Get a Clue";
         position: absolute;
         top: 0;
         left: 50%;
@@ -15,5 +15,7 @@
         white-space: nowrap;
         overflow: visible;
         pointer-events: none;
+        font-size: 2rem;
+        font-family: MuseoModerno;
     }
 }
