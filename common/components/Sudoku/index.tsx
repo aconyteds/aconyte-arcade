@@ -1,17 +1,18 @@
 import React, { useEffect, useMemo } from "react";
 import { useArray, useToggle } from "../../hooks";
 import { Row, Col, Button, Container } from "react-bootstrap";
-import { generateSudoku, validatePuzzle, solveSudoku } from "./utility";
+import { generateSudoku, validatePuzzle, solveSudoku, initializeSudokuEngine } from "./utility";
 import Puzzle from "./Puzzle";
 
 export default function Sudoku() {
+  const useWasm = false;
   const { array: puzzle, set: setPuzzle } = useArray<number>([]);
   const { array: progress, set: setProgress } = useArray<number>([]);
   const [playing, setPlaying] = useToggle(true);
   const [victory, setVictory] = useToggle(false);
 
   const generatePuzzle = async () => {
-    const puzzle = await generateSudoku();
+    const puzzle = await generateSudoku(useWasm);
     setPuzzle(puzzle);
   };
 
@@ -21,6 +22,12 @@ export default function Sudoku() {
   };
 
   useEffect(() => {
+    if (useWasm) {
+      initializeSudokuEngine().then(() => {
+        newPuzzle();
+      });
+      return;
+    }
     newPuzzle();
   }, []);
 
@@ -37,12 +44,12 @@ export default function Sudoku() {
   }, [progress]);
 
   const submitPuzzle = async () => {
-    setVictory(await validatePuzzle(progress));
+    setVictory(await validatePuzzle(progress, useWasm));
     setPlaying(false);
   };
 
   const solvePuzzle = async () => {
-    const solution = await solveSudoku(puzzle);
+    const solution = await solveSudoku(puzzle, useWasm);
     if (solution) {
       setPuzzle(solution);
     }
@@ -60,7 +67,7 @@ export default function Sudoku() {
       <Row className="justify-content-center">
         <Col lg={6}>
           <div className={`sudoku-puzzle${victory ? " border-success" : ""}`}>
-            <Puzzle puzzle={puzzle} updateProgress={updateProgress} />
+            <Puzzle puzzle={puzzle} updateProgress={updateProgress} useWasm={useWasm} />
           </div>
         </Col>
       </Row>

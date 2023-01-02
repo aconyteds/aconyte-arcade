@@ -10,8 +10,30 @@ import init, {
   get_feedback,
   get_suggestion,
   get_word,
+  InitOutput,
 } from "../../WASM/wordGame/rust_word_game";
 import { useArray, useToggle } from "../../hooks";
+
+let wordGameEngine!: InitOutput;
+/**
+ * 
+ * Method to initialize the WASM module, this allows us to only load the WASM module once
+ * 
+ * @returns Promise<InitOutput> - The WASM module
+ */
+const initializeWordGameEngine = (): Promise<InitOutput> => {
+  const loader = new Promise<InitOutput>((resolve) => {
+    if (wordGameEngine) {
+      resolve(wordGameEngine);
+      return;
+    }
+    init().then((module) => {
+      wordGameEngine = module;
+      resolve(module);
+    });
+  });
+  return loader;
+}
 
 // Array of words to use when in JS mode
 const WORDS = [
@@ -70,11 +92,11 @@ interface IWordGameContext {
 
 export const WordGameContext = createContext<IWordGameContext>({
   inGame: false,
-  newGame: () => {},
-  endGame: () => {},
+  newGame: () => { },
+  endGame: () => { },
   suggestion: { suggestion: "", probability: 0 },
-  setDifficulty: () => {},
-  submitGuess: () => {},
+  setDifficulty: () => { },
+  submitGuess: () => { },
   guesses: [],
   won: false,
   gameOver: false,
@@ -112,6 +134,10 @@ export const WordGameContextProvider: React.FC<{ children: ReactNode }> = ({
   } = useArray<Guess>([]);
 
   useEffect(() => {
+    initializeWordGameEngine();
+  }, []);
+
+  useEffect(() => {
     if (!inGame) {
       return;
     }
@@ -125,7 +151,6 @@ export const WordGameContextProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const getRandomWordWS = async (): Promise<string> => {
-    await init();
     return await get_word();
   };
 
@@ -172,7 +197,6 @@ export const WordGameContextProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const getSuggestionWS = async (): Promise<Suggestion> => {
-    await init();
     const suggestion = JSON.parse(
       await get_suggestion(JSON.stringify(guesses))
     );
@@ -207,7 +231,6 @@ export const WordGameContextProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const handleGuessWS = async (currentGuess: string): Promise<Feedback[]> => {
-    await init();
     const feedback = JSON.parse(await get_feedback(currentGuess, word));
     return feedback;
   };

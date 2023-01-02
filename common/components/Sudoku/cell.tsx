@@ -7,6 +7,7 @@ interface CellProps {
   indx: number;
   locked: boolean;
   puzzle: number[];
+  useWasm: boolean;
   onChange: (newValue: number) => void;
 }
 
@@ -16,6 +17,7 @@ export default function Cell({
   indx,
   puzzle,
   onChange,
+  useWasm = true
 }: CellProps) {
   const { array: suggestions, set: setSuggestions } = useArray<number>([]);
 
@@ -27,7 +29,8 @@ export default function Cell({
     const currSuggestions = await getSuggestions(
       puzzle,
       Math.floor(indx / 9),
-      indx % 9
+      indx % 9,
+      useWasm
     );
     setSuggestions(currSuggestions);
   };

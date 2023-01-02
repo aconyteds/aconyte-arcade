@@ -4,12 +4,14 @@ import { useArray } from "../../hooks";
 
 interface PuzzleProps {
   puzzle: number[];
+  useWasm: boolean;
   updateProgress: (board: number[]) => void;
 }
 
 export default function Puzzle({
   puzzle: basePuzzle,
   updateProgress,
+  useWasm = true,
 }: PuzzleProps) {
   const {
     array: puzzle,
@@ -59,6 +61,7 @@ export default function Puzzle({
             value={value}
             locked={locked}
             onChange={handleChange}
+            useWasm={useWasm}
           />
         );
       }
