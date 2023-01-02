@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
-import Sudoku from "../../common/components/Sudoku";
+import Menu from "../../common/components/Sudoku/Menu";
 
 const Home: NextPage = () => {
-  return <Sudoku />;
+  return <Menu />;
 };
 
 export default Home;

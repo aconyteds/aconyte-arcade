@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo } from "react";
-import { useArray, useToggle } from "../../hooks";
+import { useArray, useToggle } from "../../../hooks";
 import { Row, Col, Button, Container } from "react-bootstrap";
-import { generateSudoku, validatePuzzle, solveSudoku, initializeSudokuEngine } from "./utility";
+import { generateSudoku, validatePuzzle, solveSudoku, initializeSudokuEngine } from "../engine";
 import Puzzle from "./Puzzle";
 
 export default function Sudoku() {
-  const useWasm = false;
+  const useWasm = true;
   const { array: puzzle, set: setPuzzle } = useArray<number>([]);
   const { array: progress, set: setProgress } = useArray<number>([]);
   const [playing, setPlaying] = useToggle(true);

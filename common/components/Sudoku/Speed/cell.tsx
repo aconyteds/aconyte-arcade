@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from "react";
-import { useArray } from "../../hooks";
-import { getSuggestions } from "./utility";
+import { useArray } from "../../../hooks";
+import { getSuggestions } from "../engine";
 
 interface CellProps {
   value: number;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import Cell from "./cell";
-import { useArray } from "../../hooks";
+import { useArray } from "../../../hooks";
 
 interface PuzzleProps {
   puzzle: number[];

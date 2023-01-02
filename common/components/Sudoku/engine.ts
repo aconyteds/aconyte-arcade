@@ -10,38 +10,23 @@ import init, {
 // an array of all the indexes in a sudoku puzzle
 const INDEXES = Array.from(Array(81).keys());
 
-interface SudokuEngine {
-  solve_sudoku: (puzzle: string) => string;
-  generate_sudoku: () => string;
-  generate_suggestions: (puzzle: string, row: number, col: number) => string;
-  validate_sudoku: (puzzle: string) => boolean;
-  module: InitOutput;
-};
+let sudokuEngine: null | InitOutput = null;
 
-let sudokuEngine: null | SudokuEngine = null;
-
-export const initializeSudokuEngine = async (): Promise<SudokuEngine> => {
-  const loader = new Promise<SudokuEngine>(async (resolve) => {
+export const initializeSudokuEngine = async (): Promise<InitOutput> => {
+  const loader = new Promise<InitOutput>(async (resolve) => {
     if (sudokuEngine) {
       resolve(sudokuEngine);
       return;
     }
     const module = await init();
-    sudokuEngine = {
-      module,
-      solve_sudoku,
-      generate_sudoku,
-      generate_suggestions,
-      validate_sudoku
-    };
+    sudokuEngine = module;
     resolve(sudokuEngine);
   });
   return loader;
 };
 
 const validate_wasm = async (board: number[]): Promise<boolean> => {
-  const engine = await initializeSudokuEngine();
-  return await engine.validate_sudoku(board.join(""));
+  return validate_sudoku(board.join(""));
 }
 
 const isValid = (board: number[], index: number, value?: number): boolean => {
@@ -102,8 +87,7 @@ export const validatePuzzle = async (
 };
 
 const solve_wasm = async (board: number[]): Promise<number[] | false> => {
-  const engine = await initializeSudokuEngine();
-  const solvedPuzzle = await engine.solve_sudoku(board.join(""));
+  const solvedPuzzle = solve_sudoku(board.join(""));
   if (solvedPuzzle === "Invalid Puzzle Provided") {
     return false;
   }
@@ -194,8 +178,7 @@ export const solveSudoku = async (
 };
 
 const generate_suggestions_wasm = async (board: number[], row: number, col: number): Promise<number[]> => {
-  const engine = await initializeSudokuEngine();
-  const suggestions = await engine.generate_suggestions(board.join(""), row, col);
+  const suggestions = generate_suggestions(board.join(""), row, col);
   return suggestions.split("").map(Number);
 }
 
@@ -223,8 +206,7 @@ export const getSuggestions = async (
 };
 
 const generate_wasm = async (): Promise<number[]> => {
-  const engine = await initializeSudokuEngine();
-  const puzzle = await engine.generate_sudoku();
+  const puzzle = generate_sudoku();
   const result = puzzle.split("").map(Number);
   return result;
 };
