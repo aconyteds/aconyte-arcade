@@ -1,43 +1,18 @@
-import React, { useEffect, useMemo } from "react";
-import { useArray } from "../../../hooks";
-import { getSuggestions } from "../engine";
+import React, { useMemo } from "react";
 
 interface CellProps {
   value: number;
-  indx: number;
   locked: boolean;
-  puzzle: number[];
-  useWasm: boolean;
+  suggestions: number[];
   onChange: (newValue: number) => void;
 }
 
 export default function Cell({
   value,
   locked,
-  indx,
-  puzzle,
-  onChange,
-  useWasm = true
+  suggestions,
+  onChange
 }: CellProps) {
-  const { array: suggestions, set: setSuggestions } = useArray<number>([]);
-
-  const updateSuggestions = async () => {
-    if (!puzzle || locked) {
-      setSuggestions([]);
-      return;
-    }
-    const currSuggestions = await getSuggestions(
-      puzzle,
-      Math.floor(indx / 9),
-      indx % 9,
-      useWasm
-    );
-    setSuggestions(currSuggestions);
-  };
-
-  useEffect(() => {
-    updateSuggestions().catch(console.error);
-  }, [puzzle]);
 
   const className = useMemo(() => {
     let name = "cell";

@@ -1,78 +1,137 @@
-import React, { useEffect, useState, useMemo } from "react";
-import Cell from "./cell";
-import { useArray } from "../../../hooks";
+import React, { useEffect } from "react";
+import { useArray, useToggle } from "../../../hooks";
+import { Row, Col, Button, Container } from "react-bootstrap";
+import { generateSudoku, validatePuzzle } from "../engine";
+import Board from "./Board";
 
-interface PuzzleProps {
-  puzzle: number[];
+export type PuzzleProps = {
   useWasm: boolean;
-  updateProgress: (board: number[]) => void;
-}
+  solvePuzzle: () => void;
+  onNewPuzzle: (count: number) => void;
+  pause: () => void;
+  resume: () => void;
+  endGame: () => void;
+};
 
 export default function Puzzle({
-  puzzle: basePuzzle,
-  updateProgress,
   useWasm = true,
+  solvePuzzle,
+  onNewPuzzle,
+  pause,
+  resume,
+  endGame,
 }: PuzzleProps) {
-  const {
-    array: puzzle,
-    set: setPuzzle,
-    update: updatePuzzle,
-  } = useArray<number>([]);
-  const [lockedIndices, setLockedIndices] = useState<Set<string>>(new Set());
+  const { array: puzzle, set: setPuzzle } = useArray<number>([]);
+  const { array: progress, set: setProgress } = useArray<number>([]);
+  const [victory, setVictory] = useToggle(false);
 
-  useEffect(() => {
-    // Pupulate the locked indices
-    const lockedIndices = new Set<string>();
-    basePuzzle.forEach((cell, i) => {
-      if (cell !== 0) {
-        lockedIndices.add(`${Math.floor(i / 9)}-${i % 9}`);
-      }
-    });
+  const generatePuzzle = async () => {
+    pause();
+    const puzzle = await generateSudoku(useWasm);
+    setPuzzle(puzzle);
+    const emptyCount = puzzle.filter((cell) => cell === 0).length;
+    onNewPuzzle(emptyCount);
+  };
 
-    setPuzzle(basePuzzle.flat());
-    setLockedIndices(lockedIndices);
-  }, [basePuzzle]);
-
-  const onChange = (indx: number, value: number) => {
-    updatePuzzle(indx, value);
+  const newPuzzle = () => {
+    setVictory(false);
+    generatePuzzle().catch(console.error);
   };
 
   useEffect(() => {
-    // Update the puzzle in the parent component
-    updateProgress(puzzle);
-  }, [puzzle]);
+    newPuzzle();
+  }, []);
 
-  const Rows = useMemo(() => {
-    let rows: JSX.Element[] = [];
-    for (let row = 0; row < 9; row++) {
-      let cells: JSX.Element[] = [];
-      for (let cell = 0; cell < 9; cell++) {
-        const indx = row * 9 + cell;
-        const value = puzzle[indx];
-        const locked = lockedIndices.has(`${row}-${cell}`);
-        const handleChange = (value: number) => {
-          onChange(indx, value);
-        };
-        cells.push(
-          <Cell
-            key={indx}
-            indx={indx}
-            puzzle={puzzle}
-            value={value}
-            locked={locked}
-            onChange={handleChange}
-            useWasm={useWasm}
-          />
-        );
-      }
-      rows.push(
-        <div key={row} className="sudoku-row">
-          {cells}
-        </div>
-      );
+  const resetPuzzle = () => {
+    setPuzzle([...puzzle]);
+  };
+
+  useEffect(() => {
+    if (!progress.length) {
+      return;
     }
-    return rows;
-  }, [puzzle]);
+    const checkVictory = async () => {
+      if (progress.some((cell) => cell === 0)) {
+        return;
+      }
+      pause();
+      const victory = await validatePuzzle(progress, useWasm);
+      setVictory(victory);
+      if (!victory) {
+        resume();
+        return;
+      }
+      solvePuzzle();
+    };
+    checkVictory();
+  }, [progress]);
 
-  return <>{Rows}</>;
+  const updateProgress = (board: number[]) => {
+    setProgress(board);
+  };
+
+  return (
+    <>
+      <Row className="justify-content-center">
+        <Col lg={6}>
+          <div
+            className={`sudoku-puzzle border ${
+              victory ? "border-success" : "border-dark"
+            }`}
+          >
+            {victory ? (
+              <div className="victory-overlay">
+                <Container>
+                  <Row className="justify-content-center mt-2">
+                    <Col xs="auto">
+                      <h2 className="text-success victory-message">
+                        Puzzle Completed!
+                      </h2>
+                    </Col>
+                  </Row>
+                  <Row className="justify-content-center mt-2">
+                    <Col xs="auto">
+                      <Button size="lg" className="w-100" onClick={newPuzzle}>
+                        New Puzzle
+                      </Button>
+                    </Col>
+                  </Row>
+                </Container>
+              </div>
+            ) : null}
+            <Board
+              puzzle={puzzle}
+              updateProgress={updateProgress}
+              useWasm={useWasm}
+              victory={victory}
+            />
+          </div>
+        </Col>
+      </Row>
+      {!victory ? (
+        <Row className="justify-content-center mt-2 gy-3">
+          <Col xs="auto">
+            <Button
+              size="lg"
+              className="w-100"
+              onClick={resetPuzzle}
+              disabled={victory}
+            >
+              Reset Puzzle
+            </Button>
+          </Col>
+          <Col xs="auto">
+            <Button
+              size="lg"
+              className="w-100"
+              variant="danger"
+              onClick={endGame}
+            >
+              End Game
+            </Button>
+          </Col>
+        </Row>
+      ) : null}
+    </>
+  );
 }

@@ -26,5 +26,10 @@ export default function useInterval(
     set();
   }, [clear, set]);
 
+  useEffect(() => {
+    set();
+    return clear; // This will clear the interval when the component using the hook unmounts
+  }, [set, clear]);
+
   return { reset, clear };
 }
