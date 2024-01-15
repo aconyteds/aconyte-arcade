@@ -22,17 +22,17 @@ jobs:
 
       - name: Build
         run: npm run export
-  
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: FirebaseExtended/action-hosting-deploy@v0
-          with:
-            repoToken: "${{ secrets.GITHUB_TOKEN }}"
-            firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
-            projectId: your-Firebase-project-ID
-            channelId: live
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
+          projectId: your-Firebase-project-ID
+          channelId: live
 
       # - name: Deploy to Firebase
       #   uses: w9jds/firebase-action@master
