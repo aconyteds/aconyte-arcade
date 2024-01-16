@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 
-interface CellProps {
+export interface CellProps {
   value: number;
   locked: boolean;
   suggestions: number[];
@@ -11,9 +11,8 @@ export default function Cell({
   value,
   locked,
   suggestions,
-  onChange
+  onChange,
 }: CellProps) {
-
   const className = useMemo(() => {
     let name = "cell";
     name += locked ? " locked bg-dark text-success" : " text-white";
@@ -48,11 +47,16 @@ export default function Cell({
 
   return (
     <div className={className} onClick={onClick}>
-      <span className={`fs-1 cell-value${value === 0 ? " no-value" : ""}`}>
+      <span
+        data-testid="value"
+        className={`fs-1 cell-value${value === 0 ? " no-value" : ""}`}
+      >
         {value}
       </span>
       {locked ? null : (
-        <small className="candidates text-info">{suggestions.join(" ")}</small>
+        <small data-testid="suggestion" className="candidates text-info">
+          {suggestions.join(" ")}
+        </small>
       )}
     </div>
   );

@@ -24,7 +24,7 @@ jobs:
       - name: Test
         run: npm run test
 
-      - name: Build
+      - name: Build/Export
         run: npm run export
 
       - name: Deploy
