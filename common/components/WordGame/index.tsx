@@ -4,6 +4,7 @@ import Menu from "./Menu";
 import { Container } from "react-bootstrap";
 import { WordGameContext, WordGameContextProvider } from "./context";
 import init, { InitOutput } from "../../WASM/wordGame/rust_word_game";
+import { Loader } from "../Loader";
 
 let wordGameEngine!: InitOutput;
 /**
@@ -40,6 +41,6 @@ export default function WordGame() {
       </WordGameContext.Consumer>
     </WordGameContextProvider>
   ) : (
-    <div>Loading...</div>
+    <Loader />
   );
 }
