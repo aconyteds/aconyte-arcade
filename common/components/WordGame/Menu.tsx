@@ -1,9 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Row, Col, Button } from "react-bootstrap";
-import { WordGameContext, Difficulty } from "./context";
+import { useWordGameContext } from "./context";
+import { Difficulty } from "./models";
 
 export default function Menu() {
-  const { setDifficulty, newGame } = useContext(WordGameContext);
+  const { setDifficulty, newGame } = useWordGameContext();
 
   const handleDifficulty = (difficulty: Difficulty) => {
     setDifficulty(difficulty);
