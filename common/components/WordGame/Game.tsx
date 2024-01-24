@@ -1,13 +1,13 @@
-import React, { useState, useMemo, useContext } from "react";
+import React, { useState, useMemo } from "react";
 import { Row, Col, Button } from "react-bootstrap";
-import { WordGameContext } from "./context";
+import { useWordGameContext } from "./context";
 import Character from "./Character";
 import Suggestion from "./Suggestion";
 import GuessCounter from "./GuessCounter";
 
 export default function Game() {
   const { newGame, endGame, submitGuess, guesses, won, gameOver, wordLength } =
-    useContext(WordGameContext);
+    useWordGameContext();
   const [currentGuess, setCurrentGuess] = useState<string>("");
 
   const handleGuess = () => {

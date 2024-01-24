@@ -6,37 +6,13 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import init, {
-  get_feedback,
-  get_suggestion,
-  get_word,
-  InitOutput,
-} from "../../WASM/wordGame/rust_word_game";
+import { get_feedback, get_word } from "../../WASM/wordGame/rust_word_game";
 import { useArray, useToggle } from "../../hooks";
-
-let wordGameEngine!: InitOutput;
-/**
- * 
- * Method to initialize the WASM module, this allows us to only load the WASM module once
- * 
- * @returns Promise<InitOutput> - The WASM module
- */
-const initializeWordGameEngine = (): Promise<InitOutput> => {
-  const loader = new Promise<InitOutput>((resolve) => {
-    if (wordGameEngine) {
-      resolve(wordGameEngine);
-      return;
-    }
-    init().then((module) => {
-      wordGameEngine = module;
-      resolve(module);
-    });
-  });
-  return loader;
-}
+import { Difficulty, Guess, Feedback, Suggestion } from "./models";
+import useSuggestion from "./useSuggestion";
 
 // Array of words to use when in JS mode
-const WORDS = [
+export const WORDS = [
   "chair",
   "couch",
   "table",
@@ -57,25 +33,6 @@ const WORDS = [
   "shake",
 ];
 
-export type Difficulty = "easy" | "medium" | "hard";
-
-export interface Feedback {
-  letter: string;
-  in_word: boolean;
-  in_correct_location: boolean;
-  possible_double: boolean;
-}
-
-interface Guess {
-  word: string;
-  feedback: Feedback[];
-}
-
-interface Suggestion {
-  suggestion: string;
-  probability: number;
-}
-
 interface IWordGameContext {
   inGame: boolean;
   newGame: () => void;
@@ -92,11 +49,11 @@ interface IWordGameContext {
 
 export const WordGameContext = createContext<IWordGameContext>({
   inGame: false,
-  newGame: () => { },
-  endGame: () => { },
+  newGame: () => {},
+  endGame: () => {},
   suggestion: { suggestion: "", probability: 0 },
-  setDifficulty: () => { },
-  submitGuess: () => { },
+  setDifficulty: () => {},
+  submitGuess: () => {},
   guesses: [],
   won: false,
   gameOver: false,
@@ -104,7 +61,7 @@ export const WordGameContext = createContext<IWordGameContext>({
   guessesRemaining: 0,
 });
 
-export function useToasterContext(): IWordGameContext {
+export function useWordGameContext(): IWordGameContext {
   const value = useContext(WordGameContext);
   if (value === null) throw new Error("No Word Game Context Provided");
   return value;
@@ -123,26 +80,12 @@ export const WordGameContextProvider: React.FC<{ children: ReactNode }> = ({
   );
   const [gameOver, setGameOver] = useToggle(false);
   const [won, setWon] = useToggle(false);
-  const [suggestion, setSuggestion] = useState<Suggestion>({
-    suggestion: "",
-    probability: 0,
-  });
   const {
     array: guesses,
     push: pushGuess,
     set: setGuesses,
   } = useArray<Guess>([]);
-
-  useEffect(() => {
-    initializeWordGameEngine();
-  }, []);
-
-  useEffect(() => {
-    if (!inGame) {
-      return;
-    }
-    getSuggestion();
-  }, [guesses, word]);
+  const suggestion = useSuggestion({ guesses, useJS });
 
   const getRandomWordJS = () => {
     const randomIndex = Math.floor(Math.random() * WORDS.length);
@@ -160,47 +103,6 @@ export const WordGameContextProvider: React.FC<{ children: ReactNode }> = ({
     setInGame(true);
     setGameOver(false);
     setWon(false);
-  };
-
-  const getSuggestionJS = (): Suggestion => {
-    // Use the guesses to lookup the wordbank to identify a valid solution for the user
-    const validAnswers = guesses.reduce(
-      (answers, guess): string[] => {
-        let possibleAnswers = answers;
-        guess.feedback.forEach((feedback, indx) => {
-          if (feedback.in_correct_location) {
-            possibleAnswers = possibleAnswers.filter(
-              (answer) => answer[indx] === feedback.letter
-            );
-            return;
-          }
-          if (feedback.in_word) {
-            possibleAnswers = possibleAnswers.filter(
-              (answer) =>
-                answer.includes(feedback.letter) &&
-                answer[indx] !== feedback.letter
-            );
-            return;
-          }
-          possibleAnswers = possibleAnswers.filter(
-            (answer) => !answer.includes(feedback.letter)
-          );
-        });
-        return possibleAnswers;
-      },
-      [...WORDS]
-    );
-    return {
-      suggestion: validAnswers[Math.floor(Math.random() * validAnswers.length)],
-      probability: (1 / validAnswers.length) * 100,
-    };
-  };
-
-  const getSuggestionWS = async (): Promise<Suggestion> => {
-    const suggestion = JSON.parse(
-      await get_suggestion(JSON.stringify(guesses))
-    );
-    return suggestion;
   };
 
   // Method to take a submitted guess and determine if it is correct
@@ -233,13 +135,6 @@ export const WordGameContextProvider: React.FC<{ children: ReactNode }> = ({
   const handleGuessWS = async (currentGuess: string): Promise<Feedback[]> => {
     const feedback = JSON.parse(await get_feedback(currentGuess, word));
     return feedback;
-  };
-
-  const getSuggestion = async (): Promise<void> => {
-    const currSuggestion: Suggestion = useJS
-      ? getSuggestionJS()
-      : await getSuggestionWS();
-    setSuggestion(currSuggestion);
   };
 
   const submitGuess = async (guess: string) => {

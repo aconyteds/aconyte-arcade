@@ -1,9 +1,9 @@
-import React, { useContext, useMemo } from "react";
-import { WordGameContext } from "./context";
+import React, { useMemo } from "react";
+import { useWordGameContext } from "./context";
 import { Row, Col } from "react-bootstrap";
 
 export default function GuessCounter() {
-  const { guessesRemaining } = useContext(WordGameContext);
+  const { guessesRemaining } = useWordGameContext();
 
   const guessesRemainingText = useMemo(() => {
     return guessesRemaining > 1

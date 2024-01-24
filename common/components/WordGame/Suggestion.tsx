@@ -1,10 +1,10 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 import { useToggle } from "../../hooks";
-import { WordGameContext } from "./context";
+import { useWordGameContext } from "./context";
 
 export default function Suggestion() {
-  const { suggestion } = useContext(WordGameContext);
+  const { suggestion } = useWordGameContext();
   const [show, setShow] = useToggle(false);
 
   useEffect(() => {

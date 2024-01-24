@@ -1,6 +1,6 @@
 import React from "react";
 import { Col } from "react-bootstrap";
-import { Feedback } from "./context";
+import { Feedback } from "./models";
 
 export default function Character({
   letter,
