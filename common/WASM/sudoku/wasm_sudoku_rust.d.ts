@@ -21,6 +21,11 @@ export function generate_sudoku(): string;
 * @returns {string}
 */
 export function generate_suggestions(input: string, row: number, col: number): string;
+/**
+* @param {string} input
+* @returns {string}
+*/
+export function generate_all_suggestions(input: string): string;
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
@@ -30,6 +35,7 @@ export interface InitOutput {
   readonly solve_sudoku: (a: number, b: number, c: number) => void;
   readonly generate_sudoku: (a: number) => void;
   readonly generate_suggestions: (a: number, b: number, c: number, d: number, e: number) => void;
+  readonly generate_all_suggestions: (a: number, b: number, c: number) => void;
   readonly __wbindgen_malloc: (a: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number) => number;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;

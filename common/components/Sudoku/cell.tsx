@@ -4,14 +4,14 @@ export interface CellProps {
   value: number;
   locked: boolean;
   suggestions: number[];
-  onChange: (newValue: number) => void;
+  onClick: () => void;
 }
 
 export default function Cell({
   value,
   locked,
   suggestions,
-  onChange,
+  onClick,
 }: CellProps) {
   const className = useMemo(() => {
     let name = "cell";
@@ -22,31 +22,17 @@ export default function Cell({
     return name;
   }, [locked, suggestions]);
 
-  const onClick = (event: React.MouseEvent) => {
+  const clickHandler = (event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
-    if (locked || suggestions.length === 0) {
+    if (locked) {
       return;
     }
-    if (value === 0) {
-      onChange(suggestions[0]);
-      return;
-    }
-    // get the next suggestion
-    const index = suggestions.indexOf(value);
-    if (index === -1) {
-      // guard, should never happen
-      onChange(suggestions[0]);
-      return;
-    } else if (index === suggestions.length - 1) {
-      onChange(0);
-      return;
-    }
-    onChange(suggestions[index + 1]);
+    onClick();
   };
 
   return (
-    <div className={className} onClick={onClick}>
+    <div className={className} onClick={clickHandler}>
       <span
         data-testid="value"
         className={`fs-1 cell-value${value === 0 ? " no-value" : ""}`}

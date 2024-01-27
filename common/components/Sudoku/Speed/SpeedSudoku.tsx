@@ -2,24 +2,25 @@ import React, { useEffect, useRef, useState } from "react";
 import { useToggle, useInterval } from "../../../hooks";
 import { Row, Col, Container } from "react-bootstrap";
 import Puzzle, { PuzzleProps } from "./Puzzle";
-import { initializeSudokuEngine } from "../engine";
 import ScoreScreen, { ScoreScreenProps } from "../ScoreScreen";
+import { USE_WASM } from "../Menu";
+import { Loader } from "../../Loader";
+import { initializeSudokuEngine } from "../engine";
 
 const INTERVAL = 1000;
 const MAX_PUZZLE_COUNT = 10;
 
 export default function SpeedSudoku() {
-  const useWasm = true;
-  const [initialized, setInitialized] = useToggle(false);
   const playing = useRef<boolean>(true);
   const [puzzleCount, setPuzzleCount] = useState<number>(0);
   const [gameOver, setGameOver] = useToggle(false);
   const [totalGameTime, setTotalGameTime] = useState<number>(0);
   const [totalScore, setTotalScore] = useState<number>(0);
   const [currentScore, setCurrentScore] = useState<number>(0);
+  const [initialized, setInitialized] = useToggle(false);
 
   useEffect(() => {
-    if (!useWasm) {
+    if (!USE_WASM) {
       setInitialized(true);
       return;
     }
@@ -48,6 +49,10 @@ export default function SpeedSudoku() {
     });
   }, INTERVAL);
 
+  if (!initialized) {
+    return <Loader />;
+  }
+
   const pause = () => {
     playing.current = false;
   };
@@ -72,7 +77,7 @@ export default function SpeedSudoku() {
   };
 
   const puzzleProps: PuzzleProps = {
-    useWasm,
+    useWasm: USE_WASM,
     solvePuzzle,
     pause,
     resume,
@@ -86,10 +91,6 @@ export default function SpeedSudoku() {
     setGameOver(false);
     setTotalScore(0);
   };
-
-  if (!initialized) {
-    return <div>Loading...</div>;
-  }
 
   const scoreScreenProps: ScoreScreenProps = {
     puzzleCount,

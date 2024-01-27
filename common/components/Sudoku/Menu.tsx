@@ -1,6 +1,8 @@
 import React from "react";
 import { Row, Col, Button, Container } from "react-bootstrap";
 
+export const USE_WASM = true;
+
 export default function Menu() {
   return (
     <Container>

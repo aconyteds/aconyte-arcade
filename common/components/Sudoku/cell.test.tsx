@@ -3,12 +3,12 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Cell, { CellProps } from "./cell";
 
-describe("Sudoku -> SpeedSudoku -> Cell", () => {
+describe("Sudoku -> Cell", () => {
   const defaultProps: CellProps = {
     value: 5,
     locked: false,
     suggestions: [],
-    onChange: jest.fn(),
+    onClick: jest.fn(),
   };
 
   test("renders without error", () => {
@@ -32,18 +32,10 @@ describe("Sudoku -> SpeedSudoku -> Cell", () => {
 
   test("calls onClick handler when clicked with suggestions", async () => {
     const onClickMock = jest.fn();
-    render(<Cell {...defaultProps} onChange={onClickMock} suggestions={[3]} />);
+    render(<Cell {...defaultProps} onClick={onClickMock} suggestions={[3]} />);
     const cellElement = screen.getByText("5");
     await userEvent.click(cellElement);
     expect(onClickMock).toHaveBeenCalled();
-  });
-
-  test("Does not call onClick handler when no suggestions are provided", async () => {
-    const onClickMock = jest.fn();
-    render(<Cell {...defaultProps} onChange={onClickMock} />);
-    const cellElement = screen.getByText("5");
-    await userEvent.click(cellElement);
-    expect(onClickMock).not.toHaveBeenCalled();
   });
 
   test("Does not render suggestions when locked", () => {
