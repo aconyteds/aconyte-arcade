@@ -1,0 +1,30 @@
+@import "./Theme/_vapor_variables.scss";
+
+.logic-game-item-container {
+    height: 20vh;
+    margin: .5rem;
+    cursor: pointer;
+    transition: ease-in-out .3s background-color;
+    position: relative;
+    &:hover {
+        background-color: $gray-900;
+    }
+    &.selected {
+        box-shadow: 0 0 .5rem $info;
+
+        .logic-game-item:last-child {
+            position:absolute;
+            bottom: 100%;
+            margin-bottom: 1rem;
+            background-color: $info;
+        }
+    }
+    &.complete {
+        box-shadow: 0 0 .5rem $success;
+    }
+
+    .logic-game-item {
+        bottom: 0;
+        transition: linear .3s bottom;
+    }
+}
