@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Cell from "./cell";
 import { useArray } from "../../../hooks";
-import { getSuggestions } from "../engine";
+import { getAllSuggestions } from "../engine";
+import SpeedCell from "./SpeedCell";
 
 interface BoardProps {
   puzzle: number[];
@@ -22,19 +22,19 @@ export default function Board({
     update: updatePuzzle,
   } = useArray<number>([]);
   const { array: suggestions, set: setSuggestions } = useArray<number[]>([]);
-  const [lockedIndices, setLockedIndices] = useState<Set<string>>(new Set());
+  const [lockedIndices, setLockedIndices] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     // Pupulate the locked indices
-    const lockedIndices = new Set<string>();
+    const tempLockedIndices = new Set<number>();
     basePuzzle.forEach((cell, i) => {
       if (cell !== 0) {
-        lockedIndices.add(`${Math.floor(i / 9)}-${i % 9}`);
+        tempLockedIndices.add(i);
       }
     });
 
     setPuzzle(basePuzzle.flat());
-    setLockedIndices(lockedIndices);
+    setLockedIndices(tempLockedIndices);
   }, [basePuzzle]);
 
   useEffect(() => {
@@ -43,22 +43,19 @@ export default function Board({
     }
     // Update the puzzle in the parent component
     updateProgress(puzzle);
-    const calculateSuggestions = async () => {
-      const newSuggestions: number[][] = [];
-      for (let row = 0; row < 9; row++) {
-        for (let cell = 0; cell < 9; cell++) {
-          if (lockedIndices.has(`${row}-${cell}`)) {
-            newSuggestions.push([]);
-            continue;
-          }
-          const currSuggestions =
-            (await getSuggestions(puzzle, row, cell, useWasm)) ?? [];
-          newSuggestions.push(currSuggestions);
-        }
+    const allSuggestions = getAllSuggestions(puzzle, useWasm);
+    if (!allSuggestions) {
+      return;
+    }
+    const newSuggestions: number[][] = [];
+    for (let i = 0; i < puzzle.length; i++) {
+      if (lockedIndices.has(i)) {
+        newSuggestions.push([]);
+        continue;
       }
-      setSuggestions(newSuggestions);
-    };
-    calculateSuggestions();
+      newSuggestions.push(allSuggestions[i]);
+    }
+    setSuggestions(newSuggestions);
   }, [puzzle]);
 
   let Rows: JSX.Element[] = [];
@@ -68,13 +65,13 @@ export default function Board({
     for (let cell = 0; cell < 9; cell++) {
       const indx = row * 9 + cell;
       const value = puzzle[currIndex];
-      const locked = victory || lockedIndices.has(`${row}-${cell}`);
+      const locked = victory || lockedIndices.has(indx);
       const handleChange = (value: number) => {
         updatePuzzle(indx, value);
       };
 
       cells.push(
-        <Cell
+        <SpeedCell
           key={currIndex}
           suggestions={suggestions[currIndex] ?? []}
           value={value}

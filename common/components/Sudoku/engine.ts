@@ -3,8 +3,9 @@ import init, {
   solve_sudoku,
   generate_sudoku,
   generate_suggestions,
+  generate_all_suggestions,
   validate_sudoku,
-  InitOutput
+  InitOutput,
 } from "../../WASM/sudoku/wasm_sudoku_rust";
 
 // an array of all the indexes in a sudoku puzzle
@@ -27,7 +28,7 @@ export const initializeSudokuEngine = async (): Promise<InitOutput> => {
 
 const validate_wasm = async (board: number[]): Promise<boolean> => {
   return validate_sudoku(board.join(""));
-}
+};
 
 const isValid = (board: number[], index: number, value?: number): boolean => {
   const row = Math.floor(index / 9);
@@ -83,7 +84,7 @@ export const validatePuzzle = async (
     return await validate_wasm(board);
   }
 
-  return board.every((entry) => (isValid(board, entry)));
+  return board.every((entry) => isValid(board, entry));
 };
 
 const solve_wasm = async (board: number[]): Promise<number[] | false> => {
@@ -92,13 +93,12 @@ const solve_wasm = async (board: number[]): Promise<number[] | false> => {
     return false;
   }
   return solvedPuzzle.split("").map(Number);
-}
-
+};
 
 /**
- * 
+ *
  * Method to solve a Sudoku puzzle using backtracking, iteratively. Mutates the input board array.
- * 
+ *
  * @param board array of size 81 which will be mutated to the solved puzzle
  * @param reverse whether to solve it high to low or low to high
  * @returns Boolean indicating if the puzzle was solved, or if there was an error solving (invalid puzzle)
@@ -109,8 +109,7 @@ const solve = (board: number[], reverse: boolean = false): boolean => {
   let col: number = 0;
   let unsolvedIndexes = new Array<number>();
   let backtrack = false;
-  outer:
-  while (true) {
+  outer: while (true) {
     if (col === boardSize) {
       col = 0;
       row++;
@@ -126,8 +125,7 @@ const solve = (board: number[], reverse: boolean = false): boolean => {
       if (backtrack) {
         start = board[index];
       }
-      checkValues:
-      while (start !== end) {
+      checkValues: while (start !== end) {
         let i = start;
         start += reverse ? -1 : 1;
         if (i === 0 || (backtrack && i === board[index])) {
@@ -177,12 +175,20 @@ export const solveSudoku = async (
   return boardCopy;
 };
 
-const generate_suggestions_wasm = async (board: number[], row: number, col: number): Promise<number[]> => {
+const generate_suggestions_wasm = (
+  board: number[],
+  row: number,
+  col: number
+): number[] => {
   const suggestions = generate_suggestions(board.join(""), row, col);
   return suggestions.split("").map(Number);
-}
+};
 
-const generateSuggestions = (board: number[], row: number, col: number): number[] => {
+const generateSuggestions = (
+  board: number[],
+  row: number,
+  col: number
+): number[] => {
   const suggestions: number[] = [];
   const index = row * 9 + col;
   for (let i = 1; i <= 9; i++) {
@@ -191,18 +197,45 @@ const generateSuggestions = (board: number[], row: number, col: number): number[
     }
   }
   return suggestions;
-}
+};
 
-export const getSuggestions = async (
+export const getSuggestions = (
   board: number[],
   row: number,
   col: number,
   useWasm = true
-): Promise<number[]> => {
+): number[] => {
   if (useWasm) {
-    return await generate_suggestions_wasm(board, row, col);
+    return generate_suggestions_wasm(board, row, col);
   }
   return generateSuggestions(board, row, col);
+};
+
+const generate_all_suggestions_wasm = (board: number[]): number[][] => {
+  const suggestions = generate_all_suggestions(board.join(""));
+  return JSON.parse(suggestions);
+};
+
+const generateAllSuggestions = (board: number[]): number[][] => {
+  const suggestions: number[][] = [];
+  for (let i = 0; i < 81; i++) {
+    if (board[i] !== 0) {
+      suggestions.push([]);
+      continue;
+    }
+    suggestions.push(generateSuggestions(board, Math.floor(i / 9), i % 9));
+  }
+  return suggestions;
+};
+
+export const getAllSuggestions = (
+  Board: number[],
+  useWasm = true
+): number[][] => {
+  if (useWasm) {
+    return generate_all_suggestions_wasm(Board);
+  }
+  return generateAllSuggestions(Board);
 };
 
 const generate_wasm = async (): Promise<number[]> => {
@@ -224,14 +257,20 @@ const generate = (fillPercentage: number): number[] => {
   solve(board);
 
   const shuffledBoard = shuffle(INDEXES);
-  for (let i = 0; i < Math.floor(shuffledBoard.length * (fillPercentage / 100)); i++) {
+  for (
+    let i = 0;
+    i < Math.floor(shuffledBoard.length * (fillPercentage / 100));
+    i++
+  ) {
     board[shuffledBoard[i]] = 0;
   }
   return board;
-}
+};
 
-
-export const generateSudoku = async (useWasm = true, fillPercentage = 50): Promise<number[]> => {
+export const generateSudoku = async (
+  useWasm = true,
+  fillPercentage = 50
+): Promise<number[]> => {
   if (useWasm) {
     return await generate_wasm();
   }
