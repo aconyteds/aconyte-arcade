@@ -22,7 +22,6 @@ const availableIcons = [...ITEM_ICONS.keys()];
 export const generateGame = ({
   difficulty,
 }: GenerateGameParams): GenerateGameResult => {
-  console.log(difficulty);
   const {
     containers,
     containerLimit,

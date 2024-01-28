@@ -17,16 +17,13 @@ interface ILogicGameContext {
   inGame: boolean;
   newGame: () => void;
   startGame: (difficulty: Difficulty) => void;
-  endGame: () => void;
-  setDifficulty: (difficulty: Difficulty) => void;
   won: boolean;
   gameOver: boolean;
-  generatePuzzle: () => void;
   containersRemaining: number;
   containers: ItemContainerProps[];
+  containerLimit: number;
   selectContainer: (container: ItemContainerProps) => void;
   selectedContainer: ItemContainerProps | null;
-  containerLimit: number;
   addContainer: () => void;
   gameTime?: string;
 }
@@ -35,11 +32,8 @@ export const LogicGameContext = createContext<ILogicGameContext>({
   inGame: false,
   newGame: () => {},
   startGame: () => {},
-  endGame: () => {},
-  setDifficulty: () => {},
   won: false,
   gameOver: false,
-  generatePuzzle: () => {},
   containersRemaining: 0,
   containers: [],
   containerLimit: 0,
@@ -78,6 +72,7 @@ export const LogicGameContextProvider: React.FC<{ children: ReactNode }> = ({
     set: setContainers,
     update: updateContainer,
     push: pushContainer,
+    clear: clearContainers,
   } = useArray<ItemContainerProps>([]);
 
   const generatePuzzle = () => {
@@ -209,15 +204,26 @@ export const LogicGameContextProvider: React.FC<{ children: ReactNode }> = ({
     setGameTime(formatTime(seconds));
   }, [gameOver]);
 
-  const newGame = () => {
-    setInGame(true);
+  const reset = () => {
+    clearContainers();
+    setContainersRemaining(0);
+    setContainerLimit(0);
+    setSelectedContainer(null);
+    setStartTime(null);
+    setGameTime("");
     setWon(false);
     setGameOver(false);
+  };
+
+  const newGame = () => {
+    reset();
+    setInGame(true);
     generatePuzzle();
     setStartTime(new Date());
   };
 
   const startGame = (difficulty: Difficulty) => {
+    reset();
     setDifficulty(difficulty);
     setInGame(true);
   };
@@ -239,16 +245,13 @@ export const LogicGameContextProvider: React.FC<{ children: ReactNode }> = ({
     });
   };
 
-  const value = useMemo(
+  const value = useMemo<ILogicGameContext>(
     () => ({
       inGame,
       newGame,
       startGame,
-      endGame,
-      setDifficulty,
       won,
       gameOver,
-      generatePuzzle,
       containersRemaining,
       containers,
       containerLimit,
@@ -261,11 +264,8 @@ export const LogicGameContextProvider: React.FC<{ children: ReactNode }> = ({
       inGame,
       newGame,
       startGame,
-      endGame,
-      setDifficulty,
       won,
       gameOver,
-      generatePuzzle,
       containersRemaining,
       containers,
       containerLimit,
