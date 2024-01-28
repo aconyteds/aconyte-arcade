@@ -41,6 +41,18 @@ describe("LogicGame -> ScoreScreen", () => {
     expect(remainingContainersText).toBeInTheDocument();
   });
 
+  it("displays the remaining container message", () => {
+    (useLogicGameContext as jest.Mock).mockReturnValue({
+      ...fakeContext,
+      containersRemaining: 1,
+    });
+    const { getByText } = render(<ScoreScreen />);
+    const remainingContainersText = getByText(
+      /You still had 1 container remaining./
+    );
+    expect(remainingContainersText).toBeInTheDocument();
+  });
+
   it("displays the no remaining containers message", () => {
     (useLogicGameContext as jest.Mock).mockReturnValue({
       ...fakeContext,

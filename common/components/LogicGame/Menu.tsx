@@ -10,8 +10,6 @@ import {
 import { useLogicGameContext } from "./context";
 import { Difficulty } from "./models";
 
-export const USE_WASM = true;
-
 export default function Menu() {
   const { startGame } = useLogicGameContext();
 
