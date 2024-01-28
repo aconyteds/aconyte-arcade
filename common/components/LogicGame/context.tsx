@@ -11,6 +11,7 @@ import { Difficulty, ItemContainerProps } from "./models";
 import { useArray, useToggle } from "../../hooks";
 import { checkForDefeat, generateGame } from "./engine";
 import { formatTime } from "../../utilities";
+import { useToasterContext } from "../../contexts/toaster";
 
 interface ILogicGameContext {
   inGame: boolean;
@@ -61,6 +62,7 @@ export function useLogicGameContext(): ILogicGameContext {
 export const LogicGameContextProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  const { toast } = useToasterContext();
   const [difficulty, setDifficulty] = useState<Difficulty>(Difficulty.Easy);
   const [inGame, setInGame] = useToggle(false);
   const [won, setWon] = useToggle(false);
@@ -79,16 +81,24 @@ export const LogicGameContextProvider: React.FC<{ children: ReactNode }> = ({
   } = useArray<ItemContainerProps>([]);
 
   const generatePuzzle = () => {
-    const {
-      containers: newContainers,
-      additionalContainers,
-      containerLimit: newContainerLimit,
-    } = generateGame({
-      difficulty,
-    });
-    setContainers(newContainers);
-    setContainersRemaining(additionalContainers);
-    setContainerLimit(newContainerLimit);
+    try {
+      const {
+        containers: newContainers,
+        additionalContainers,
+        containerLimit: newContainerLimit,
+      } = generateGame({
+        difficulty,
+      });
+      setContainers(newContainers);
+      setContainersRemaining(additionalContainers);
+      setContainerLimit(newContainerLimit);
+    } catch (e) {
+      toast(
+        "error",
+        "An error occurred while generating the puzzle. We tried 10k times, but couldn't find a valid puzzle. Sending you back to the menu."
+      );
+      endGame();
+    }
   };
 
   const selectContainer = useCallback(
