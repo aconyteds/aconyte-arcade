@@ -17,14 +17,20 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Navbar bg="dark" variant="dark" expand="lg">
           <Container>
             <Navbar.Brand href="/">Arcade</Navbar.Brand>
-            <Nav className="me-auto">
-              <Link href="/games/sudoku" passHref>
-                <Nav.Link>Sudoku</Nav.Link>
-              </Link>
-              <Link href="/games/wordGame" passHref>
-                <Nav.Link>Word Game</Nav.Link>
-              </Link>
-            </Nav>
+            <Navbar.Toggle aria-controls="game-navigation-menu" />
+            <Navbar.Collapse id="game-navigation-menu">
+              <Nav className="me-auto">
+                <Link href="/games/sudoku" passHref>
+                  <Nav.Link>Sudoku</Nav.Link>
+                </Link>
+                <Link href="/games/wordGame" passHref>
+                  <Nav.Link>Word Game</Nav.Link>
+                </Link>
+                <Link href="/games/logicGame" passHref>
+                  <Nav.Link>Logic Game</Nav.Link>
+                </Link>
+              </Nav>
+            </Navbar.Collapse>
           </Container>
         </Navbar>
         <ToasterContextProvider>

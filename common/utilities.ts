@@ -15,10 +15,12 @@ export function shuffle<T>(array: T[]): T[] {
   return copy;
 }
 
-// Method to format time in a human readable format
-// Accepts a number of seconds and returns a string
-// The string should be formatted as mm:ss
-// If the Minutes are greater than 60, the string should be formatted as hh:mm
+/**
+ * Method to format time in a human readable format. Accepts a number of seconds and returns a formatted string.
+ *
+ * @param seconds - number - Number of seconds to format
+ * @returns `timeString` - string - Formatted Number string: mm:ss. If the Minutes are greater than 60, the string should be formatted as hh:mm.
+ * */
 export function formatTime(seconds: number): string {
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = seconds % 60;

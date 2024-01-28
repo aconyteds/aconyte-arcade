@@ -1,11 +1,4 @@
-import React, {
-  useContext,
-  createContext,
-  ReactNode,
-  useMemo,
-  useRef,
-  useEffect,
-} from "react";
+import React, { useContext, createContext, ReactNode, useMemo } from "react";
 import { useArray } from "../hooks";
 import { ToastContainer, Toast } from "react-bootstrap";
 
@@ -34,23 +27,11 @@ export function useToasterContext(): IToasterContext {
 export const ToasterContextProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const portalRef = useRef<HTMLElement | null>(null);
   const {
     array: displayedToasts,
     push: addToast,
     remove: removeToast,
   } = useArray<Toast>([]);
-
-  useEffect(() => {
-    portalRef.current = document.createElement("div");
-    portalRef.current.className = "toaster";
-    document.body.appendChild(portalRef.current);
-    return () => {
-      if (portalRef.current) {
-        document.body.removeChild(portalRef.current);
-      }
-    };
-  }, []);
 
   const toast = (
     severity: ToastSeverity,
@@ -69,7 +50,7 @@ export const ToasterContextProvider: React.FC<{ children: ReactNode }> = ({
 
   const RenderMessages = (): JSX.Element[] => {
     return displayedToasts.map((toast, index) => (
-      <Toast key={index} bg={toast.severity}>
+      <Toast key={index} bg={toast.severity} onClick={() => removeToast(index)}>
         <Toast.Body>{toast.message}</Toast.Body>
       </Toast>
     ));
