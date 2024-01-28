@@ -32,8 +32,7 @@ export default function Menu() {
           </p>
           <ListGroup>
             <ListGroupItem>
-              You may not have more than (4 easy, 5 medium, 6 hard) items in a
-              container.
+              Click on the containers to move items between them.
             </ListGroupItem>
             <ListGroupItem>
               You may only remove the "top" item from a container.
@@ -43,16 +42,12 @@ export default function Menu() {
               container.
             </ListGroupItem>
             <ListGroupItem>
-              You must be able to move an item into another container for it to
-              be removed from a container.
-            </ListGroupItem>
-            <ListGroupItem>
               You are allowed to add a limited number of empty containers if you
               get stuck.
             </ListGroupItem>
             <ListGroupItem>
               The game ends when there are no more viable moves OR you have
-              properly matched all items in their containers.
+              properly filled a container with all of the same items.
             </ListGroupItem>
           </ListGroup>
         </Col>
