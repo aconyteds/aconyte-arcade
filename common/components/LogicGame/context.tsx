@@ -13,7 +13,7 @@ import { checkForDefeat, generateGame } from "./engine";
 import { formatTime } from "../../utilities";
 import { useToasterContext } from "../../contexts/toaster";
 
-interface ILogicGameContext {
+export interface ILogicGameContext {
   inGame: boolean;
   newGame: () => void;
   startGame: (difficulty: Difficulty) => void;
