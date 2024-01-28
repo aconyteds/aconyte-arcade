@@ -6,6 +6,7 @@ export type CountdownButtonProps = {
   onClick: () => void;
   // The number of milliseconds that the user has to click the button
   timeLimit: number;
+  speed?: number;
   children?: React.ReactNode;
 } & ButtonProps;
 
@@ -19,6 +20,7 @@ const CountdownButton: React.FC<CountdownButtonProps> = ({
   onClick,
   timeLimit,
   children,
+  speed = 10,
   ...rest
 }) => {
   const [timeLeft, setTimeLeft] = useState(timeLimit); // 10 seconds in milliseconds
@@ -29,8 +31,8 @@ const CountdownButton: React.FC<CountdownButtonProps> = ({
     }
 
     const intervalId = setInterval(() => {
-      setTimeLeft((timeLeft) => Math.max(0, timeLeft - 10)); // decrement by 10 milliseconds, stop at 0
-    }, 10); // update every 10 milliseconds
+      setTimeLeft((timeLeft) => Math.max(0, timeLeft - speed)); // decrement by 10 milliseconds, stop at 0
+    }, speed); // update every 10 milliseconds
 
     return () => clearInterval(intervalId);
   }, []);

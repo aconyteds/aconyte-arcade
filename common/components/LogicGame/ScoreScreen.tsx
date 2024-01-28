@@ -39,7 +39,11 @@ export const ScoreScreen = () => {
             <Card.Footer>
               <Row className="justify-content-center mt-2">
                 <Col xs="auto">
-                  <CountdownButton onClick={newGame} timeLimit={10000}>
+                  <CountdownButton
+                    onClick={newGame}
+                    speed={1000}
+                    timeLimit={10000}
+                  >
                     Play Again
                   </CountdownButton>
                 </Col>
