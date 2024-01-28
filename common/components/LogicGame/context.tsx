@@ -9,11 +9,13 @@ import React, {
 } from "react";
 import { Difficulty, ItemContainerProps } from "./models";
 import { useArray, useToggle } from "../../hooks";
-import { generateGame } from "./engine";
+import { checkForDefeat, generateGame } from "./engine";
+import { formatTime } from "../../utilities";
 
 interface ILogicGameContext {
   inGame: boolean;
   newGame: () => void;
+  startGame: (difficulty: Difficulty) => void;
   endGame: () => void;
   setDifficulty: (difficulty: Difficulty) => void;
   won: boolean;
@@ -23,13 +25,15 @@ interface ILogicGameContext {
   containers: ItemContainerProps[];
   selectContainer: (container: ItemContainerProps) => void;
   selectedContainer: ItemContainerProps | null;
-  itemCount: number;
+  containerLimit: number;
   addContainer: () => void;
+  gameTime?: string;
 }
 
 export const LogicGameContext = createContext<ILogicGameContext>({
   inGame: false,
   newGame: () => {},
+  startGame: () => {},
   endGame: () => {},
   setDifficulty: () => {},
   won: false,
@@ -37,10 +41,11 @@ export const LogicGameContext = createContext<ILogicGameContext>({
   generatePuzzle: () => {},
   containersRemaining: 0,
   containers: [],
-  itemCount: 0,
+  containerLimit: 0,
   selectContainer: () => {},
   selectedContainer: null,
   addContainer: () => {},
+  gameTime: "",
 });
 
 export function useLogicGameContext(): ILogicGameContext {
@@ -61,10 +66,11 @@ export const LogicGameContextProvider: React.FC<{ children: ReactNode }> = ({
   const [won, setWon] = useToggle(false);
   const [gameOver, setGameOver] = useToggle(false);
   const [containersRemaining, setContainersRemaining] = useState<number>(0);
-
-  const [itemCount, setItemCount] = useState<number>(0);
+  const [startTime, setStartTime] = useState<Date | null>(null);
+  const [containerLimit, setContainerLimit] = useState<number>(0);
   const [selectedContainer, setSelectedContainer] =
     useState<ItemContainerProps | null>(null);
+  const [gameTime, setGameTime] = useState<string>();
   const {
     array: containers,
     set: setContainers,
@@ -76,13 +82,13 @@ export const LogicGameContextProvider: React.FC<{ children: ReactNode }> = ({
     const {
       containers: newContainers,
       additionalContainers,
-      itemCount: newItemCount,
+      containerLimit: newContainerLimit,
     } = generateGame({
       difficulty,
     });
     setContainers(newContainers);
     setContainersRemaining(additionalContainers);
-    setItemCount(newItemCount);
+    setContainerLimit(newContainerLimit);
   };
 
   const selectContainer = useCallback(
@@ -104,7 +110,7 @@ export const LogicGameContextProvider: React.FC<{ children: ReactNode }> = ({
       }
 
       // If the selected container is full, we can't move to it
-      if (newContainer.items.length === itemCount) {
+      if (newContainer.items.length === containerLimit) {
         setSelectedContainer(newContainer);
         return;
       }
@@ -161,7 +167,7 @@ export const LogicGameContextProvider: React.FC<{ children: ReactNode }> = ({
         }
 
         return (
-          container.items.length === itemCount &&
+          container.items.length === containerLimit &&
           container.items.every((item) => item === container.items[0])
         );
       })
@@ -169,13 +175,41 @@ export const LogicGameContextProvider: React.FC<{ children: ReactNode }> = ({
       setWon(true);
       setGameOver(true);
     }
-  }, [containers]);
+
+    // Check if there are no more valid moves
+    if (containersRemaining > 0) {
+      return;
+    }
+
+    if (checkForDefeat(containers, containerLimit)) {
+      setGameOver(true);
+    }
+  }, [containers, containerLimit]);
+
+  useEffect(() => {
+    if (!gameOver) {
+      return;
+    }
+    if (!startTime) {
+      return;
+    }
+    const endTime = new Date();
+    const timeDiff = endTime.getTime() - startTime.getTime();
+    const seconds = Math.floor(timeDiff / 1000);
+    setGameTime(formatTime(seconds));
+  }, [gameOver]);
 
   const newGame = () => {
     setInGame(true);
     setWon(false);
     setGameOver(false);
     generatePuzzle();
+    setStartTime(new Date());
+  };
+
+  const startGame = (difficulty: Difficulty) => {
+    setDifficulty(difficulty);
+    setInGame(true);
   };
 
   const endGame = () => {
@@ -199,6 +233,7 @@ export const LogicGameContextProvider: React.FC<{ children: ReactNode }> = ({
     () => ({
       inGame,
       newGame,
+      startGame,
       endGame,
       setDifficulty,
       won,
@@ -206,14 +241,16 @@ export const LogicGameContextProvider: React.FC<{ children: ReactNode }> = ({
       generatePuzzle,
       containersRemaining,
       containers,
-      itemCount,
+      containerLimit,
       selectContainer,
       selectedContainer,
       addContainer,
+      gameTime,
     }),
     [
       inGame,
       newGame,
+      startGame,
       endGame,
       setDifficulty,
       won,
@@ -221,9 +258,11 @@ export const LogicGameContextProvider: React.FC<{ children: ReactNode }> = ({
       generatePuzzle,
       containersRemaining,
       containers,
-      itemCount,
+      containerLimit,
       selectContainer,
       selectedContainer,
+      addContainer,
+      gameTime,
     ]
   );
 

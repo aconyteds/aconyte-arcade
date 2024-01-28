@@ -6,8 +6,11 @@ import { useLogicGameContext } from "./context";
 
 const ItemContainer: React.FC<ItemContainerProps> = (props) => {
   const { items, indx } = props;
-  const { itemCount, selectContainer, selectedContainer } =
-    useLogicGameContext();
+  const {
+    containerLimit: itemCount,
+    selectContainer,
+    selectedContainer,
+  } = useLogicGameContext();
   const containerRef = useRef<HTMLDivElement>(null);
   const [itemHeight, setItemHeight] = useState<string>("75%");
 

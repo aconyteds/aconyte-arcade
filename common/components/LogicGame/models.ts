@@ -39,8 +39,8 @@ export type ItemContainerProps = {
 export type DifficultyConfigurations = {
   // The number of containers the game should start with
   containers: number;
-  // The number of items, of each TYPE, that should be in the game. Also the number of items a container can hold
-  itemCount: number;
+  // The number of items a container can hold, also the number of items, of each TYPE, that should be in the game.
+  containerLimit: number;
   // The amount of types (icons) that should be in the game
   uniqueItemTypeCount: number;
   additionalContainers: number;
@@ -52,21 +52,21 @@ export const DIFFICULTY_CONFIGURATIONS: Record<
 > = {
   easy: {
     containers: 6,
-    itemCount: 4,
+    containerLimit: 4,
     uniqueItemTypeCount: 4,
     additionalContainers: 3,
   },
   medium: {
-    containers: 7,
-    itemCount: 4,
+    containers: 8,
+    containerLimit: 5,
     uniqueItemTypeCount: 6,
     additionalContainers: 2,
   },
   hard: {
-    containers: 9,
-    itemCount: 5,
-    uniqueItemTypeCount: 8,
-    additionalContainers: 0,
+    containers: 8,
+    containerLimit: 6,
+    uniqueItemTypeCount: 7,
+    additionalContainers: 1,
   },
 };
 

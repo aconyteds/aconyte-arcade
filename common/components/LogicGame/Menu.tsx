@@ -8,11 +8,17 @@ import {
   ListGroup,
 } from "react-bootstrap";
 import { useLogicGameContext } from "./context";
+import { Difficulty } from "./models";
 
 export const USE_WASM = true;
 
 export default function Menu() {
-  const { newGame } = useLogicGameContext();
+  const { startGame } = useLogicGameContext();
+
+  const handleDifficulty = (difficulty: Difficulty) => {
+    startGame(difficulty);
+  };
+
   return (
     <Container>
       <Row className="justify-content-center">
@@ -28,34 +34,65 @@ export default function Menu() {
           </p>
           <ListGroup>
             <ListGroupItem>
-              You may not have more than x items in a container
+              You may not have more than (4 easy, 5 medium, 6 hard) items in a
+              container.
             </ListGroupItem>
             <ListGroupItem>
-              You may not play an item into a container which does not have the
-              same type "on top"
+              You may only remove the "top" item from a container.
             </ListGroupItem>
             <ListGroupItem>
-              You may only remove the "top" item from a container
+              You may not add an item on top of a different item in another
+              container.
             </ListGroupItem>
             <ListGroupItem>
               You must be able to move an item into another container for it to
-              be removed from a container
+              be removed from a container.
             </ListGroupItem>
             <ListGroupItem>
-              You may be allowed to add empty containers
+              You are allowed to add a limited number of empty containers if you
+              get stuck.
             </ListGroupItem>
             <ListGroupItem>
               The game ends when there are no more viable moves OR you have
-              properly matched all items in their containers
+              properly matched all items in their containers.
             </ListGroupItem>
           </ListGroup>
         </Col>
       </Row>
       <Row className="justify-content-center mt-2">
-        <Col xs="auto">
-          <Button variant="success" onClick={newGame}>
-            New Game
-          </Button>
+        <Col md={6}>
+          <Row className="flex-column gap-2 justify-content-center">
+            <Col xs="auto">
+              <Button
+                className="w-100"
+                variant="success"
+                size="lg"
+                onClick={() => handleDifficulty(Difficulty.Easy)}
+              >
+                Easy
+              </Button>
+            </Col>
+            <Col xs="auto">
+              <Button
+                className="w-100"
+                variant="warning"
+                size="lg"
+                onClick={() => handleDifficulty(Difficulty.Medium)}
+              >
+                Medium
+              </Button>
+            </Col>
+            <Col xs="auto">
+              <Button
+                className="w-100"
+                variant="danger"
+                size="lg"
+                onClick={() => handleDifficulty(Difficulty.Hard)}
+              >
+                Hard
+              </Button>
+            </Col>
+          </Row>
         </Col>
       </Row>
     </Container>
