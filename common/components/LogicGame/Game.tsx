@@ -8,6 +8,7 @@ import { ScoreScreen } from "./ScoreScreen";
 const Game: React.FC = () => {
   const {
     newGame,
+    endGame,
     gameOver,
     inGame,
     containers,
@@ -46,7 +47,7 @@ const Game: React.FC = () => {
                 <Card.Title as="h3">Logic Game</Card.Title>
               </Col>
               <Col xs="auto">
-                <Button href="/games/logicGame" variant="danger">
+                <Button onClick={endGame} variant="danger">
                   Main Menu
                 </Button>
               </Col>

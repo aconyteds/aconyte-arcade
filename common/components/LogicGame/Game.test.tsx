@@ -10,6 +10,7 @@ describe("LogicGame -> Game", () => {
   beforeEach(() => {
     fakeContext = {
       newGame: jest.fn(),
+      endGame: jest.fn(),
       gameOver: false,
       containers: [
         {
@@ -47,9 +48,22 @@ describe("LogicGame -> Game", () => {
     const gameTitle = getByText("Logic Game");
     expect(gameTitle).toBeInTheDocument();
 
+    expect(fakeContext.newGame).toHaveBeenCalledTimes(1);
     const mainMenuButton = getByRole("button", { name: "Main Menu" });
     expect(mainMenuButton).toBeInTheDocument();
-    expect(fakeContext.newGame).toHaveBeenCalledTimes(1);
+  });
+
+  it("Calls endGame when the main menu button is clicked", async () => {
+    const { getByRole } = render(<Game />);
+
+    const mainMenuButton = getByRole("button", { name: "Main Menu" });
+    expect(mainMenuButton).toBeInTheDocument();
+
+    await act(async () => {
+      await userEvent.click(mainMenuButton);
+    });
+
+    expect(fakeContext.endGame).toHaveBeenCalled();
   });
 
   it("Calls addContainer when that button is clicked", async () => {

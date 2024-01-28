@@ -16,6 +16,7 @@ import { useToasterContext } from "../../contexts/toaster";
 export interface ILogicGameContext {
   inGame: boolean;
   newGame: () => void;
+  endGame: () => void;
   startGame: (difficulty: Difficulty) => void;
   won: boolean;
   gameOver: boolean;
@@ -31,6 +32,7 @@ export interface ILogicGameContext {
 export const LogicGameContext = createContext<ILogicGameContext>({
   inGame: false,
   newGame: () => {},
+  endGame: () => {},
   startGame: () => {},
   won: false,
   gameOver: false,
@@ -232,9 +234,8 @@ export const LogicGameContextProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const endGame = () => {
+    reset();
     setInGame(false);
-    setWon(false);
-    setGameOver(false);
   };
 
   const addContainer = () => {
@@ -252,6 +253,7 @@ export const LogicGameContextProvider: React.FC<{ children: ReactNode }> = ({
     () => ({
       inGame,
       newGame,
+      endGame,
       startGame,
       won,
       gameOver,
@@ -266,6 +268,7 @@ export const LogicGameContextProvider: React.FC<{ children: ReactNode }> = ({
     [
       inGame,
       newGame,
+      endGame,
       startGame,
       won,
       gameOver,

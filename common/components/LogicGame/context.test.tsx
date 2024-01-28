@@ -44,6 +44,7 @@ const TestComponent = () => {
   const {
     inGame,
     newGame,
+    endGame,
     startGame,
     won,
     gameOver,
@@ -59,6 +60,7 @@ const TestComponent = () => {
   return (
     <>
       <button onClick={newGame}>New Game</button>
+      <button onClick={endGame}>End Game</button>
       <button onClick={() => startGame(Difficulty.Easy)}>Easy</button>
       <button onClick={() => startGame(Difficulty.Medium)}>Medium</button>
       <button onClick={() => startGame(Difficulty.Hard)}>Hard</button>
@@ -395,5 +397,45 @@ describe("LogicGame -> Context", () => {
     expect(inGame).toBeInTheDocument();
     expect(inGame).toHaveTextContent("true");
     generateGameSpy.mockRestore();
+  });
+
+  it('Properly exits the game when "End Game" is clicked', async () => {
+    const { getByText, getByTestId, getAllByTitle } = render(
+      <LogicGameContextProvider>
+        <TestComponent />
+      </LogicGameContextProvider>
+    );
+    const startGameButton = getByText("New Game");
+    expect(startGameButton).toBeInTheDocument();
+    await act(async () => {
+      await userEvent.click(startGameButton);
+    });
+    const containers = getAllByTitle("container");
+    await act(async () => {
+      await userEvent.click(containers[1]);
+    });
+    await act(async () => {
+      await userEvent.click(containers[0]);
+    });
+    expect(
+      getAllByTitle("container")[0].querySelectorAll("[title=item]")
+    ).toHaveLength(3);
+    const gameOver = getByTestId("game-over");
+    expect(gameOver).toBeInTheDocument();
+    expect(gameOver).toHaveTextContent("true");
+    const won = getByTestId("won");
+    expect(won).toBeInTheDocument();
+    expect(won).toHaveTextContent("true");
+    const inGame = getByTestId("in-game");
+    expect(inGame).toBeInTheDocument();
+    expect(inGame).toHaveTextContent("true");
+    const endGameButton = getByText("End Game");
+    expect(endGameButton).toBeInTheDocument();
+    await act(async () => {
+      await userEvent.click(endGameButton);
+    });
+    expect(gameOver).toHaveTextContent("false");
+    expect(won).toHaveTextContent("false");
+    expect(inGame).toHaveTextContent("false");
   });
 });
