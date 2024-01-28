@@ -6,14 +6,20 @@ import { ScoreScreen } from "./ScoreScreen";
 
 // This is the main game component, it will house the logic for the game
 const Game: React.FC = () => {
-  const { newGame, gameOver, containers, containersRemaining, addContainer } =
-    useLogicGameContext();
+  const {
+    newGame,
+    gameOver,
+    inGame,
+    containers,
+    containersRemaining,
+    addContainer,
+  } = useLogicGameContext();
 
   const maxContainers = containersRemaining === 0;
 
   useEffect(() => {
     newGame();
-  }, []);
+  }, [inGame]);
 
   const buttonVariant = useMemo(() => {
     if (maxContainers) {

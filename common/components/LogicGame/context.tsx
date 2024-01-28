@@ -164,6 +164,9 @@ export const LogicGameContextProvider: React.FC<{ children: ReactNode }> = ({
   );
 
   useEffect(() => {
+    if (containers.length === 0) {
+      return;
+    }
     // If all containers holding items are full, and they are all the same, you win
     if (
       containers.every((container) => {
