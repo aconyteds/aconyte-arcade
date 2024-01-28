@@ -95,9 +95,13 @@ const TestComponent = () => {
   );
 };
 
-describe("LogicGameContextProvider", () => {
+describe("LogicGame -> Context", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  afterAll(() => {
+    jest.restoreAllMocks();
   });
 
   it.each([

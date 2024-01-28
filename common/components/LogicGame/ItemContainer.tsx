@@ -39,7 +39,7 @@ const ItemContainer: React.FC<ItemContainerProps> = (props) => {
     if (calc > width) {
       calc = width * 0.75;
     }
-    setItemHeight(`${calc - 0.5}px`);
+    setItemHeight(`${Math.floor(calc) - 0.5}px`);
   };
 
   // Setup the event listener for resizing
@@ -69,6 +69,7 @@ const ItemContainer: React.FC<ItemContainerProps> = (props) => {
       }}
       className={className}
       onClick={clickHandler}
+      data-testid="item-container"
     >
       <Row className="h-100 flex-column-reverse align-items-center justify-content-start">
         {items.map((item, index) => (

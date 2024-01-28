@@ -6,7 +6,7 @@ import {
   ItemType,
 } from "./models";
 
-describe("generateGame", () => {
+describe("LogicGame -> Engine", () => {
   it.each([[Difficulty.Easy], [Difficulty.Medium], [Difficulty.Hard]])(
     "should generate a valid game for difficulty %s",
     (difficulty: Difficulty) => {

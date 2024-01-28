@@ -5,7 +5,7 @@ import Game from "./Game";
 
 jest.mock("./context");
 
-describe("Game", () => {
+describe("LogicGame -> Game", () => {
   let fakeContext!: Partial<ILogicGameContext>;
   beforeEach(() => {
     fakeContext = {
@@ -35,6 +35,10 @@ describe("Game", () => {
     (useLogicGameContext as jest.Mock).mockImplementation(
       jest.fn(() => fakeContext)
     );
+  });
+
+  afterAll(() => {
+    jest.restoreAllMocks();
   });
 
   it("Renders the game component", () => {
