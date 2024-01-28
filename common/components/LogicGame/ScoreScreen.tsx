@@ -4,7 +4,7 @@ import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import CountdownButton from "../CountdownButton";
 
 export const ScoreScreen = () => {
-  const { newGame, gameTime, won } = useLogicGameContext();
+  const { newGame, gameTime, won, containersRemaining } = useLogicGameContext();
 
   return (
     <Container className="pt-2">
@@ -21,7 +21,12 @@ export const ScoreScreen = () => {
                 <Col xs="auto">
                   {won ? (
                     <Card.Text className="text-success">
-                      You finished in {gameTime}.
+                      You finished in {gameTime}.{" "}
+                      {containersRemaining > 0
+                        ? `You still had ${containersRemaining} container${
+                            containersRemaining > 1 ? "s" : ""
+                          } remaining.`
+                        : "It took every container."}
                     </Card.Text>
                   ) : (
                     <Card.Text className="text-danger">
