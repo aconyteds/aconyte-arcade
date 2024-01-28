@@ -13,6 +13,10 @@ const Home: NextPage = () => {
     router.push("/games/wordGame");
   };
 
+  const launchLogicGame = () => {
+    router.push("/games/logicGame");
+  };
+
   return (
     <Container>
       <Row className="justify-content-center">
@@ -76,6 +80,29 @@ const Home: NextPage = () => {
                   </span>{" "}
                   text means the letter occurs more than once in the word.
                 </li>
+              </ol>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col>
+          <Card onClick={launchLogicGame} className="cursor-pointer shadow">
+            <Card.Header>
+              <Card.Img variant="top" src="/LogicGame.png" />
+            </Card.Header>
+            <Card.Body>
+              <Card.Title>
+                <h3 className="text-center">Logic Game</h3>
+              </Card.Title>
+              <Card.Subtitle className="mb-2 text-muted text-center">
+                A symbol matching game where you need to match them all to win.
+              </Card.Subtitle>
+              <ol>
+                <li>
+                  Symbols must be placed on top of the same symbol or into an
+                  empty container.
+                </li>
+                <li>You have a limited number of empty containers to use.</li>
+                <li>You must match all symbols to win.</li>
               </ol>
             </Card.Body>
           </Card>
