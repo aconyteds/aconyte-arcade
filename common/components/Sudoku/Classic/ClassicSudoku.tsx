@@ -52,6 +52,7 @@ export default function ClassicSudoku() {
     setOriginalBoard([...newBoard]);
     setSuggestions([]);
     setIsComplete(false);
+    setSelectedCell(null);
   };
 
   const handleCellClick = (index: number) => {
