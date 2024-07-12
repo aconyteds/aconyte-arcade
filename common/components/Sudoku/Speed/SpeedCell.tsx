@@ -7,6 +7,7 @@ type SpeedCellProps = {
   suggestions: number[];
   onChange: (newValue: number) => void;
 };
+
 const SpeedCell: React.FC<SpeedCellProps> = ({
   value,
   locked,
