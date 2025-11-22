@@ -1,7 +1,3 @@
-import React from 'react';
+import ClassicSudoku from "./ClassicSudoku";
 
-export default function ClassicSudoku() {
-  return (
-    <div>index</div>
-  )
-}
+export default ClassicSudoku;

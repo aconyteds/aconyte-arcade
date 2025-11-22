@@ -1,23 +1,33 @@
 import React, { useMemo } from "react";
 
 export interface CellProps {
+  cellType?: "classic" | "speed";
   value: number;
   locked: boolean;
   suggestions: number[];
+  selected?: boolean;
   onClick: () => void;
 }
 
 export default function Cell({
+  cellType = "speed",
   value,
   locked,
   suggestions,
+  selected = false,
   onClick,
 }: CellProps) {
   const className = useMemo(() => {
     let name = "cell";
     name += locked ? " locked bg-dark text-success" : " text-white";
-    if (!locked && suggestions.length === 0) {
+    if (locked) {
+      return name;
+    }
+    if (cellType === "speed" && suggestions.length === 0) {
       name += " border-danger";
+    }
+    if (selected) {
+      name += " border-primary";
     }
     return name;
   }, [locked, suggestions]);

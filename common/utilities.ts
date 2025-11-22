@@ -46,3 +46,31 @@ export function formatNumber(value: number): string {
   const userLocale = navigator.language;
   return new Intl.NumberFormat(userLocale).format(value);
 }
+
+/**
+ * Method which lightens a Hex color by a given percentage. The percentage should be a number between 0 and 100.
+ *
+ * @param hex A Hex color String, e.g. '#FF0000'
+ * @param percent A Numerical percentage value, e.g. 10
+ * @returns A Hex color string that is lightened by the percentage value
+ */
+export function lightenHexColor(hex: string, percent: number): string {
+  // Remove the '#' character if it exists
+  hex = hex.replace(/^\s*#|\s*$/g, "");
+
+  // Convert to RGB
+  let r = parseInt(hex.substr(0, 2), 16);
+  let g = parseInt(hex.substr(2, 2), 16);
+  let b = parseInt(hex.substr(4, 2), 16);
+
+  // Lighten
+  r = Math.round(Math.min(255, Math.max(0, r + (255 - r) * (percent / 100))));
+  g = Math.round(Math.min(255, Math.max(0, g + (255 - g) * (percent / 100))));
+  b = Math.round(Math.min(255, Math.max(0, b + (255 - b) * (percent / 100))));
+
+  // Convert back to hex
+  return (
+    "#" +
+    ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase()
+  );
+}
