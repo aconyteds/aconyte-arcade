@@ -29,7 +29,7 @@ const COLOR_MAP = new Map<ButtonVariant, ColorMap>(
   ].map(([key, value]) => [
     key as ButtonVariant,
     { darker: value, lighter: lightenHexColor(value, 50) },
-  ])
+  ]),
 );
 
 export type HoldButtonProps = {
@@ -81,7 +81,6 @@ const ConfirmationButton: React.FC<HoldButtonProps> = ({
 
     return () => clearInterval(intervalId);
   }, [isHolding, holdTime, onComplete, endHold]);
-  console.log(children, variant);
   const { darker: darkColor, lighter: lightColor } = COLOR_MAP.get(variant)!;
 
   const buttonStyle = {

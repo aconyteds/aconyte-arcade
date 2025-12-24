@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 export function useLocalStorage<T>(
   key: string,
-  initialValue: T
+  initialValue: T,
 ): [T, (value: T) => void] {
   const storageLocation = useRef<Storage>();
   useEffect(() => {
@@ -20,7 +20,7 @@ export function useLocalStorage<T>(
       const item = storageLocation.current?.getItem(key);
       return item ? JSON.parse(item) : initialValue;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return initialValue;
     }
   });
@@ -31,7 +31,7 @@ export function useLocalStorage<T>(
       setStoredValue(valueToStore);
       storageLocation.current?.setItem(key, JSON.stringify(valueToStore));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -40,7 +40,7 @@ export function useLocalStorage<T>(
 
 export function useSessionStorage<T>(
   key: string,
-  initialValue: T
+  initialValue: T,
 ): [T, (value: T) => void] {
   const storageLocation = useRef<Storage>(sessionStorage);
   useEffect(() => {
@@ -51,7 +51,7 @@ export function useSessionStorage<T>(
       const item = storageLocation.current.getItem(key);
       return item ? JSON.parse(item) : initialValue;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return initialValue;
     }
   });
@@ -63,7 +63,7 @@ export function useSessionStorage<T>(
       setStoredValue(valueToStore);
       storageLocation.current.setItem(key, JSON.stringify(valueToStore));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
