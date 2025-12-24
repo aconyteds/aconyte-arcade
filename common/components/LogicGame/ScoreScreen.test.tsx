@@ -36,7 +36,7 @@ describe("LogicGame -> ScoreScreen", () => {
   it("displays the remaining containers message", () => {
     const { getByText } = render(<ScoreScreen />);
     const remainingContainersText = getByText(
-      /You still had 2 containers remaining./
+      /You still had 2 containers remaining./,
     );
     expect(remainingContainersText).toBeInTheDocument();
   });
@@ -48,7 +48,7 @@ describe("LogicGame -> ScoreScreen", () => {
     });
     const { getByText } = render(<ScoreScreen />);
     const remainingContainersText = getByText(
-      /You still had 1 container remaining./
+      /You still had 1 container remaining./,
     );
     expect(remainingContainersText).toBeInTheDocument();
   });

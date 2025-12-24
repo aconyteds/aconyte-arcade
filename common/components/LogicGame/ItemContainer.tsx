@@ -55,8 +55,8 @@ const ItemContainer: React.FC<ItemContainerProps> = (props) => {
     complete
       ? "border-success complete"
       : selectedContainer?.indx === indx
-      ? "border-info bg-dark selected"
-      : "border-primary"
+        ? "border-info bg-dark selected"
+        : "border-primary"
   }`;
 
   return (

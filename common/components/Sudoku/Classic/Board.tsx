@@ -42,14 +42,14 @@ export default function Board({
           selected={selectedCell === currIndex}
           onClick={handleClick}
           suggestions={suggestions[currIndex]}
-        />
+        />,
       );
       currIndex += 1;
     }
     Rows.push(
       <div key={row} className={`sudoku-row${victory ? " correct" : ""}`}>
         {cells}
-      </div>
+      </div>,
     );
   }
   return <>{Rows}</>;

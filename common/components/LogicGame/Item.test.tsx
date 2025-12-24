@@ -14,7 +14,7 @@ describe("LogicGame -> Item", () => {
 
     expect(iconElement).toBeInTheDocument();
     expect(iconElement?.getAttribute("data-icon")).toBe(
-      ITEM_ICONS.get(item)?.iconName
+      ITEM_ICONS.get(item)?.iconName,
     );
   });
 

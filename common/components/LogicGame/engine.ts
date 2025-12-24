@@ -40,7 +40,7 @@ export const generateGame = ({
   }
   // These are the icons we will use for the game
   const icons: ItemType[] = randomIconIndex.map(
-    (number) => availableIcons[number] as ItemType
+    (number) => availableIcons[number] as ItemType,
   );
 
   // We need a number if items equal to containerLimit * icons.length
@@ -61,7 +61,7 @@ export const generateGame = ({
       (_, indx) => ({
         indx,
         items: [],
-      })
+      }),
     );
     // Now we need to put the items in the containers, randomly
     const assignRandomItemsToContainers = (item: ItemType) => {
@@ -113,7 +113,7 @@ export const generateGame = ({
  */
 export const checkForDefeat = (
   containerList: ItemContainerProps[],
-  containerLimit: number
+  containerLimit: number,
 ): boolean => {
   return containerList.every((container) => {
     if (container.items.length === 0) {
@@ -128,7 +128,7 @@ export const checkForDefeat = (
         c.items.length > 0 &&
         c.items.length < containerLimit &&
         c.items[c.items.length - 1] ===
-          container.items[container.items.length - 1]
+          container.items[container.items.length - 1],
     );
 
     // If there is a container with the same item on top, you can move

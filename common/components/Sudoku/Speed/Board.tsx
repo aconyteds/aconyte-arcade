@@ -77,14 +77,14 @@ export default function Board({
           value={value}
           locked={locked}
           onChange={handleChange}
-        />
+        />,
       );
       currIndex += 1;
     }
     Rows.push(
       <div key={row} className={`sudoku-row${victory ? " correct" : ""}`}>
         {cells}
-      </div>
+      </div>,
     );
   }
   return <>{Rows}</>;

@@ -34,7 +34,7 @@ describe("LogicGame -> Game", () => {
       addContainer: jest.fn(),
     };
     (useLogicGameContext as jest.Mock).mockImplementation(
-      jest.fn(() => fakeContext)
+      jest.fn(() => fakeContext),
     );
   });
 
@@ -83,7 +83,7 @@ describe("LogicGame -> Game", () => {
 
   it("Displays 'All containers used' when all containers are added, and button is disabled", () => {
     (useLogicGameContext as jest.Mock).mockImplementation(
-      jest.fn(() => ({ ...fakeContext, containersRemaining: 0 }))
+      jest.fn(() => ({ ...fakeContext, containersRemaining: 0 })),
     );
     const { getByRole } = render(<Game />);
 
@@ -96,7 +96,7 @@ describe("LogicGame -> Game", () => {
 
   it("Displays the correct number of remaining containers", () => {
     (useLogicGameContext as jest.Mock).mockImplementation(
-      jest.fn(() => ({ ...fakeContext, containersRemaining: 69 }))
+      jest.fn(() => ({ ...fakeContext, containersRemaining: 69 })),
     );
     const { getByText, getByRole } = render(<Game />);
 
@@ -111,7 +111,7 @@ describe("LogicGame -> Game", () => {
 
   it("Displays the score screen when game is over", () => {
     (useLogicGameContext as jest.Mock).mockImplementation(
-      jest.fn(() => ({ ...fakeContext, gameOver: true }))
+      jest.fn(() => ({ ...fakeContext, gameOver: true })),
     );
     const { getByText } = render(<Game />);
 

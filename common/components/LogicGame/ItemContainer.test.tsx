@@ -20,7 +20,7 @@ describe("LogicGame -> ItemContainer", () => {
       selectContainer: jest.fn(),
     };
     (useLogicGameContext as jest.Mock).mockImplementation(
-      jest.fn(() => fakeContext)
+      jest.fn(() => fakeContext),
     );
   });
 
@@ -49,7 +49,7 @@ describe("LogicGame -> ItemContainer", () => {
 
   it("applies the 'complete' class when items are complete", () => {
     const { getByTestId } = render(
-      <ItemContainer {...mockProps} items={["otter", "otter", "otter"]} />
+      <ItemContainer {...mockProps} items={["otter", "otter", "otter"]} />,
     );
 
     const container = getByTestId("item-container");
@@ -70,7 +70,7 @@ describe("LogicGame -> ItemContainer", () => {
 
   it("Does not call selectContainer when items are complete", () => {
     const { getByTestId } = render(
-      <ItemContainer {...mockProps} items={["otter", "otter", "otter"]} />
+      <ItemContainer {...mockProps} items={["otter", "otter", "otter"]} />,
     );
 
     const container = getByTestId("item-container");

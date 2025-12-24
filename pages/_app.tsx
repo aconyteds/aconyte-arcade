@@ -20,13 +20,13 @@ function MyApp({ Component, pageProps }: AppProps) {
             <Navbar.Toggle aria-controls="game-navigation-menu" />
             <Navbar.Collapse id="game-navigation-menu">
               <Nav className="me-auto">
-                <Link href="/games/sudoku" passHref>
+                <Link href="/games/sudoku" passHref legacyBehavior>
                   <Nav.Link>Sudoku</Nav.Link>
                 </Link>
-                <Link href="/games/wordGame" passHref>
+                <Link href="/games/wordGame" passHref legacyBehavior>
                   <Nav.Link>Word Game</Nav.Link>
                 </Link>
-                <Link href="/games/logicGame" passHref>
+                <Link href="/games/logicGame" passHref legacyBehavior>
                   <Nav.Link>Logic Game</Nav.Link>
                 </Link>
               </Nav>
