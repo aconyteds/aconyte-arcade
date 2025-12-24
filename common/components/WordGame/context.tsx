@@ -76,7 +76,7 @@ export const WordGameContextProvider: React.FC<{ children: ReactNode }> = ({
   const [word, setWord] = useState<string>("");
   const totalGuesses = useMemo(
     () => (difficulty === "easy" ? 10 : difficulty === "medium" ? 7 : 5),
-    [difficulty]
+    [difficulty],
   );
   const [gameOver, setGameOver] = useToggle(false);
   const [won, setWon] = useToggle(false);
@@ -189,7 +189,7 @@ export const WordGameContextProvider: React.FC<{ children: ReactNode }> = ({
       guesses,
       won,
       gameOver,
-    ]
+    ],
   );
 
   return (

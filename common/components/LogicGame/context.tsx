@@ -49,7 +49,7 @@ export function useLogicGameContext(): ILogicGameContext {
   const value = useContext(LogicGameContext);
   if (value === null) {
     throw new Error(
-      "useLogicGameContext must be used within a LogicGameProvider"
+      "useLogicGameContext must be used within a LogicGameProvider",
     );
   }
   return value;
@@ -92,7 +92,7 @@ export const LogicGameContextProvider: React.FC<{ children: ReactNode }> = ({
     } catch (e) {
       toast(
         "error",
-        "An error occurred while generating the puzzle. We tried 10k times, but couldn't find a valid puzzle. Sending you back to the menu."
+        "An error occurred while generating the puzzle. We tried 10k times, but couldn't find a valid puzzle. Sending you back to the menu.",
       );
       endGame();
     }
@@ -162,7 +162,7 @@ export const LogicGameContextProvider: React.FC<{ children: ReactNode }> = ({
       // Finally, we just select the new container if we can't move
       setSelectedContainer(newContainer);
     },
-    [selectedContainer, updateContainer]
+    [selectedContainer, updateContainer],
   );
 
   useEffect(() => {
@@ -279,7 +279,7 @@ export const LogicGameContextProvider: React.FC<{ children: ReactNode }> = ({
       selectedContainer,
       addContainer,
       gameTime,
-    ]
+    ],
   );
 
   return (

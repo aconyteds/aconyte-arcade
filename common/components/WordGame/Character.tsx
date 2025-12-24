@@ -11,8 +11,8 @@ export default function Character({
   const className = in_correct_location
     ? "bg-success text-white"
     : in_word
-    ? "bg-warning text-white"
-    : "bg-danger";
+      ? "bg-warning text-white"
+      : "bg-danger";
 
   return (
     <Col xs="auto" className={`border border-1 ${className}`}>

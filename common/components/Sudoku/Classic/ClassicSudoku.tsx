@@ -16,13 +16,13 @@ export default function ClassicSudoku() {
   const { array: board, set: setBoard } = useArray<number>(Array(81).fill(0));
   const [initialized, setInitialized] = useState(false);
   const { array: originalBoard, set: setOriginalBoard } = useArray<number>(
-    Array(81).fill(0)
+    Array(81).fill(0),
   );
   const { array: suggestions, set: setSuggestions } = useArray<number[]>([]);
   const [selectedCell, setSelectedCell] = useState<number | null>(null);
   const [isComplete, setIsComplete] = useState(false);
   const [lockedIndices, setLockedIndices] = useState<Set<number>>(
-    new Set<number>()
+    new Set<number>(),
   );
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export default function ClassicSudoku() {
     const newBoard = await generateSudoku();
     setBoard(newBoard);
     setLockedIndices(
-      new Set(newBoard.map((value, index) => (value === 0 ? -1 : index)))
+      new Set(newBoard.map((value, index) => (value === 0 ? -1 : index))),
     );
     setOriginalBoard([...newBoard]);
     setSuggestions([]);

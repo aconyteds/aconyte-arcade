@@ -21,6 +21,9 @@ jobs:
       - name: Test
         run: bun run test
 
+      - name: Build Storybook
+        run: bun run build-storybook
+
       - name: Build/Export
         run: bun run export
 

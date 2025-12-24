@@ -70,7 +70,7 @@ const isValid = (board: number[], index: number, value?: number): boolean => {
 
 export const validatePuzzle = async (
   board: number[],
-  useWasm = true
+  useWasm = true,
 ): Promise<boolean> => {
   const finished = board.every((char) => {
     return char !== 0;
@@ -162,7 +162,7 @@ const solve = (board: number[], reverse: boolean = false): boolean => {
 // Methods to call the WASM Sudoku Package
 export const solveSudoku = async (
   board: number[],
-  useWasm = true
+  useWasm = true,
 ): Promise<number[] | false> => {
   if (useWasm) {
     return await solve_wasm(board);
@@ -178,7 +178,7 @@ export const solveSudoku = async (
 const generate_suggestions_wasm = (
   board: number[],
   row: number,
-  col: number
+  col: number,
 ): number[] => {
   const suggestions = generate_suggestions(board.join(""), row, col);
   return suggestions.split("").map(Number);
@@ -187,7 +187,7 @@ const generate_suggestions_wasm = (
 const generateSuggestions = (
   board: number[],
   row: number,
-  col: number
+  col: number,
 ): number[] => {
   const suggestions: number[] = [];
   const index = row * 9 + col;
@@ -203,7 +203,7 @@ export const getSuggestions = (
   board: number[],
   row: number,
   col: number,
-  useWasm = true
+  useWasm = true,
 ): number[] => {
   if (useWasm) {
     return generate_suggestions_wasm(board, row, col);
@@ -230,7 +230,7 @@ const generateAllSuggestions = (board: number[]): number[][] => {
 
 export const getAllSuggestions = (
   Board: number[],
-  useWasm = true
+  useWasm = true,
 ): number[][] => {
   if (useWasm) {
     return generate_all_suggestions_wasm(Board);
@@ -269,7 +269,7 @@ const generate = (fillPercentage: number): number[] => {
 
 export const generateSudoku = async (
   useWasm = true,
-  fillPercentage = 50
+  fillPercentage = 50,
 ): Promise<number[]> => {
   if (useWasm) {
     return await generate_wasm();

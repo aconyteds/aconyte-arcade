@@ -28,7 +28,7 @@ describe("Sudoku -> SpeedSudoku -> SpeedCell", () => {
   test("does not call onChange handler when clicked on a locked cell", async () => {
     const onChangeMock = jest.fn();
     render(
-      <SpeedCell {...defaultProps} locked={true} onChange={onChangeMock} />
+      <SpeedCell {...defaultProps} locked={true} onChange={onChangeMock} />,
     );
     const cellElement = screen.getByText("5");
     await userEvent.click(cellElement);
@@ -38,7 +38,7 @@ describe("Sudoku -> SpeedSudoku -> SpeedCell", () => {
   test("does not call onChange handler when clicked on a cell with no suggestions", async () => {
     const onChangeMock = jest.fn();
     render(
-      <SpeedCell {...defaultProps} suggestions={[]} onChange={onChangeMock} />
+      <SpeedCell {...defaultProps} suggestions={[]} onChange={onChangeMock} />,
     );
     const cellElement = screen.getByText("5");
     await userEvent.click(cellElement);

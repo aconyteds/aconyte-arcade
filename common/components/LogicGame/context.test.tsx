@@ -124,7 +124,7 @@ describe("LogicGame -> Context", () => {
       const { getByText, getAllByTitle } = render(
         <LogicGameContextProvider>
           <TestComponent />
-        </LogicGameContextProvider>
+        </LogicGameContextProvider>,
       );
       if (buttonName) {
         const button = getByText(buttonName);
@@ -143,14 +143,14 @@ describe("LogicGame -> Context", () => {
       const items = getAllByTitle("item");
       expect(items.length).toBe(itemCount);
       realSpy.mockRestore();
-    }
+    },
   );
 
   it("Properly sets inGame when starting game", async () => {
     const { getByText, getByTestId } = render(
       <LogicGameContextProvider>
         <TestComponent />
-      </LogicGameContextProvider>
+      </LogicGameContextProvider>,
     );
     const startGameButton = getByText("New Game");
     expect(startGameButton).toBeInTheDocument();
@@ -167,7 +167,7 @@ describe("LogicGame -> Context", () => {
     const { getByText, getByTestId, queryByTitle, getAllByTitle } = render(
       <LogicGameContextProvider>
         <TestComponent />
-      </LogicGameContextProvider>
+      </LogicGameContextProvider>,
     );
     const startGameButton = getByText("New Game");
     expect(startGameButton).toBeInTheDocument();
@@ -199,7 +199,7 @@ describe("LogicGame -> Context", () => {
     const { getByText, getByTestId, getAllByTitle } = render(
       <LogicGameContextProvider>
         <TestComponent />
-      </LogicGameContextProvider>
+      </LogicGameContextProvider>,
     );
     const startGameButton = getByText("New Game");
     expect(startGameButton).toBeInTheDocument();
@@ -220,7 +220,7 @@ describe("LogicGame -> Context", () => {
     const { getByText, getByTestId, getAllByTitle } = render(
       <LogicGameContextProvider>
         <TestComponent />
-      </LogicGameContextProvider>
+      </LogicGameContextProvider>,
     );
     const startGameButton = getByText("New Game");
     expect(startGameButton).toBeInTheDocument();
@@ -244,7 +244,7 @@ describe("LogicGame -> Context", () => {
       await userEvent.click(containers[containers.length - 1]);
     });
     expect(
-      containers[containers.length - 1].querySelectorAll("[title=item]")
+      containers[containers.length - 1].querySelectorAll("[title=item]"),
     ).toHaveLength(1);
   });
 
@@ -252,7 +252,7 @@ describe("LogicGame -> Context", () => {
     const { getByText, getByTestId, getAllByTitle } = render(
       <LogicGameContextProvider>
         <TestComponent />
-      </LogicGameContextProvider>
+      </LogicGameContextProvider>,
     );
     const startGameButton = getByText("New Game");
     expect(startGameButton).toBeInTheDocument();
@@ -274,10 +274,10 @@ describe("LogicGame -> Context", () => {
       await userEvent.click(targetContainer);
     });
     expect(
-      getAllByTitle("container")[1].querySelectorAll("[title=item]")
+      getAllByTitle("container")[1].querySelectorAll("[title=item]"),
     ).toHaveLength(0);
     expect(
-      getAllByTitle("container")[0].querySelectorAll("[title=item]")
+      getAllByTitle("container")[0].querySelectorAll("[title=item]"),
     ).toHaveLength(3);
     expect(selectedContainer).toHaveTextContent("");
   });
@@ -286,7 +286,7 @@ describe("LogicGame -> Context", () => {
     const { getByText, getByTestId, getAllByTitle } = render(
       <LogicGameContextProvider>
         <TestComponent />
-      </LogicGameContextProvider>
+      </LogicGameContextProvider>,
     );
     const startGameButton = getByText("New Game");
     expect(startGameButton).toBeInTheDocument();
@@ -311,7 +311,7 @@ describe("LogicGame -> Context", () => {
     const { getByText, getByTestId, getAllByTitle } = render(
       <LogicGameContextProvider>
         <TestComponent />
-      </LogicGameContextProvider>
+      </LogicGameContextProvider>,
     );
     const startGameButton = getByText("New Game");
     expect(startGameButton).toBeInTheDocument();
@@ -326,7 +326,7 @@ describe("LogicGame -> Context", () => {
       await userEvent.click(containers[0]);
     });
     expect(
-      getAllByTitle("container")[0].querySelectorAll("[title=item]")
+      getAllByTitle("container")[0].querySelectorAll("[title=item]"),
     ).toHaveLength(3);
     const won = getByTestId("won");
     expect(won).toBeInTheDocument();
@@ -364,13 +364,13 @@ describe("LogicGame -> Context", () => {
     });
     const generateGameSpy = jest.spyOn(
       engineModule,
-      "generateGame" as keyof typeof engineModule
+      "generateGame" as keyof typeof engineModule,
     );
     generateGameSpy.mockImplementation(mockGenerateGame);
     const { getByText, getByTestId, getAllByTitle } = render(
       <LogicGameContextProvider>
         <TestComponent />
-      </LogicGameContextProvider>
+      </LogicGameContextProvider>,
     );
     const startGameButton = getByText("New Game");
     expect(startGameButton).toBeInTheDocument();
@@ -385,7 +385,7 @@ describe("LogicGame -> Context", () => {
       await userEvent.click(containers[0]);
     });
     expect(
-      getAllByTitle("container")[0].querySelectorAll("[title=item]")
+      getAllByTitle("container")[0].querySelectorAll("[title=item]"),
     ).toHaveLength(3);
     const gameOver = getByTestId("game-over");
     expect(gameOver).toBeInTheDocument();
@@ -403,7 +403,7 @@ describe("LogicGame -> Context", () => {
     const { getByText, getByTestId, getAllByTitle } = render(
       <LogicGameContextProvider>
         <TestComponent />
-      </LogicGameContextProvider>
+      </LogicGameContextProvider>,
     );
     const startGameButton = getByText("New Game");
     expect(startGameButton).toBeInTheDocument();
@@ -418,7 +418,7 @@ describe("LogicGame -> Context", () => {
       await userEvent.click(containers[0]);
     });
     expect(
-      getAllByTitle("container")[0].querySelectorAll("[title=item]")
+      getAllByTitle("container")[0].querySelectorAll("[title=item]"),
     ).toHaveLength(3);
     const gameOver = getByTestId("game-over");
     expect(gameOver).toBeInTheDocument();

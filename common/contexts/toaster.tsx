@@ -36,13 +36,13 @@ export const ToasterContextProvider: React.FC<{ children: ReactNode }> = ({
   const toast = (
     severity: ToastSeverity,
     message: string,
-    duration: number = 6000
+    duration: number = 6000,
   ) => {
     if (!message) return;
     addToast({ severity, message, duration });
     setTimeout(() => {
       const index = displayedToasts.findIndex(
-        (_toast) => _toast.message === message
+        (_toast) => _toast.message === message,
       );
       removeToast(index);
     }, duration);

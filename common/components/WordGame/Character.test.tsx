@@ -12,7 +12,7 @@ describe("Character", () => {
     const { getByText } = render(
       <Character
         {...{ ...defaultProps, in_word: true, in_correct_location: true }}
-      />
+      />,
     );
 
     const characterElement = getByText("A");
@@ -34,7 +34,7 @@ describe("Character", () => {
 
   test("Renders a warning background if it is in the word but not in the right place", () => {
     const { getByText } = render(
-      <Character {...{ ...defaultProps, in_word: true }} />
+      <Character {...{ ...defaultProps, in_word: true }} />,
     );
 
     const characterElement = getByText("A");
@@ -46,7 +46,7 @@ describe("Character", () => {
 
   test("Underlines the letter if it is a possible double", () => {
     const { getByText } = render(
-      <Character {...{ ...defaultProps, possible_double: true }} />
+      <Character {...{ ...defaultProps, possible_double: true }} />,
     );
 
     const characterElement = getByText("A");

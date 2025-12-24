@@ -21,8 +21,8 @@ describe("LogicGame -> Engine", () => {
           difficulty === "easy"
             ? Difficulty.Easy
             : difficulty === "medium"
-            ? Difficulty.Medium
-            : Difficulty.Hard
+              ? Difficulty.Medium
+              : Difficulty.Hard
         ];
       // Check if the game has the correct properties
       expect(game).toHaveProperty("containers");
@@ -46,7 +46,7 @@ describe("LogicGame -> Engine", () => {
 
       expect(totalItems).toBe(containerLimit * uniqueItemTypeCount);
       expect(uniqueItems.size).toBe(uniqueItemTypeCount);
-    }
+    },
   );
 
   it.each([
@@ -151,10 +151,10 @@ describe("LogicGame -> Engine", () => {
     (
       expectedValue: boolean,
       game: ItemContainerProps[],
-      containerLimit: number
+      containerLimit: number,
     ) => {
       const result = checkForDefeat(game, containerLimit);
       expect(result).toBe(expectedValue);
-    }
+    },
   );
 });
